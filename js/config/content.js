@@ -114,7 +114,7 @@
        anim : 'bounce' | 'honk' | 'glow'   fx : emoji / mot qui s'envole au toucher
        actions : go ('home'|'jeux'|'quiz'), anchor, tab ('aware'|'quiz'), game ('memory'|'tap')  */
     buildings: [
-      { id: 'sos', label: 'Maison des familles', room: 'familles', rect: [655, 145, 315, 215], anim: 'bounce', fx: 'SOS',
+      { id: 'sos', label: 'Maison - cuisine', room: 'familles', rect: [655, 145, 315, 215], anim: 'bounce', fx: 'SOS',
         text: 'Voici le bâtiment SOS ! Retrouve ses informations officielles sur la page d’accueil.',
         actions: [{ label: 'Voir les coordonnées', go: 'home', anchor: 'infos' }] },
       { id: 'admin', label: 'Administration', room: 'admin', rect: [290, 150, 320, 185], anim: 'bounce', fx: '',
@@ -130,10 +130,10 @@
       { id: 'atelier', label: 'Centre des jeunes', room: 'jeunes', rect: [370, 525, 270, 182], anim: 'glow', fx: '',
         text: 'Cet atelier aux panneaux solaires et à la grande fresque parle de sensibilisation.',
         actions: [{ label: 'Lire les messages', go: 'quiz', tab: 'aware' }] },
-      { id: 'maisons', label: 'Maisons SOS', room: 'maison', rect: [30, 30, 225, 205], anim: 'glow', fx: '',
+      { id: 'maisons', label: 'Maison - salon', room: 'maison', rect: [30, 30, 225, 205], anim: 'glow', fx: '',
         text: 'Ici vivent les habitants de la ville. Chaque maison est un foyer.', actions: [] },
-      { id: 'maisons2', label: 'Maisons SOS', room: 'maison', rect: [1160, 90, 108, 110], anim: 'glow', fx: '',
-        text: 'Encore des maisons ! Chaque maison est un foyer.', actions: [] },
+      { id: 'maisons2', label: 'Maison - chambre', room: 'chambre', rect: [1160, 90, 108, 110], anim: 'glow', fx: '',
+        text: 'Encore une maison SOS : découvrons la chambre.', actions: [] },
       { id: 'bus', label: 'Bus scolaire', rect: [995, 555, 125, 80], anim: 'honk', fx: 'Bip bip !',
         text: 'Bip bip ! Le bus scolaire emmène les enfants à l’école.', actions: [] }
     ],
@@ -156,7 +156,7 @@
        fig : apparence du personnage ; at : [x %, y % des pieds] dans la salle. */
     rooms: {
       maison: {
-        title: 'Une maison SOS', kind: 'maison',
+        title: 'Le salon familial', kind: 'maison',
         intro: 'Bienvenue dans une maison ! Touche chaque personnage pour l’écouter. Les prénoms sont fictifs : ce sont des personnages illustratifs.',
         chars: [
           { id: 'mere', label: 'La maman', role: 'Mère d’accueil', at: [47, 90], fig: { skin: '#D9A47C', hair: '#4A2F27', style: 'bun', top: '#E2556A', bottom: '#1D3768' },
@@ -234,8 +234,8 @@
         actions: [{ label: 'Lire les messages', go: 'quiz', tab: 'aware' }] },
 
       familles: {
-        title: 'La maison des familles', kind: 'familles',
-        intro: 'Ici, on découvre le programme de renforcement de la famille. Touche la maman pour l’écouter.',
+        title: 'La cuisine de la maison', kind: 'cuisine',
+        intro: 'Bienvenue dans la cuisine ! Touche la maman pour l’écouter. Ce personnage est fictif.',
         chars: [
           { id: 'maman2', label: 'Une maman', role: 'Personnage fictif', at: [50, 90], fig: { skin: '#E0B08A', hair: '#4A2F27', style: 'long', top: '#08A9E0', bottom: '#1D3768', dress: true },
             lines: [
@@ -245,6 +245,20 @@
             ] }
         ],
         actions: [{ label: 'Voir les coordonnées', go: 'home', anchor: 'infos' }] },
+
+      chambre: {
+        title: 'La chambre des enfants', kind: 'chambre',
+        intro: 'Voici une chambre de la maison. Yasmine et Amine sont des personnages fictifs : touche-les pour les écouter.',
+        chars: [
+          { id: 'yasmine', label: 'Yasmine', role: 'Personnage fictif', at: [38, 91], fig: { skin: '#D9A47C', hair: '#2B2220', style: 'long', top: '#E2556A', bottom: '#1D3768', kid: true },
+            lines: [
+              { text: 'Voici ma chambre : j’aime lire une histoire ou dessiner tranquillement ici.', source: 'Personnage fictif' }
+            ] },
+          { id: 'amine', label: 'Amine', role: 'Personnage fictif', at: [68, 91], fig: { skin: '#C98F66', hair: '#2B2220', style: 'short', top: '#08A9E0', bottom: '#4B5F85', kid: true },
+            lines: [
+              { text: 'On range nos affaires ensemble et on partage les jeux avec toute la famille.', source: 'Personnage fictif' }
+            ] }
+        ] },
 
       jardin: {
         title: 'Le jardin', kind: 'jardin',

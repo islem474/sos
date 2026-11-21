@@ -27,6 +27,12 @@
       return this.mascot.say(text, opts);
     }
 
+    cancelPending() {
+      this.token++;
+      clearTimeout(this.pending);
+      this.mascot.hideBubble('replaced');
+    }
+
     start() {
       this.observeScenes();
     }
@@ -82,9 +88,7 @@
 
     /* ---------- Accompagnement entre les rubriques ---------- */
     onViewChange(name, quiet) {
-      this.token++;
-      clearTimeout(this.pending);
-      this.mascot.hideBubble('replaced');
+      this.cancelPending();
 
       if (name === 'home') {            // retour à l'accueil : retrouve la scène en cours, sans reparler
         this.mascot.moveTo({ x: 'right', y: 'bottom' }, { animate: false });
