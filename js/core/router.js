@@ -4,7 +4,6 @@
   const SOS = (window.SOS = window.SOS || {});
   const { reducedMotion } = SOS.utils;
 
-  const TITLES = { home: 'SOS — Accueil', ville: 'SOS — Ville', jeux: 'SOS — Jeux', quiz: 'SOS — Quiz & sensibilisation' };
 
   class Router {
     constructor(app, views) {
@@ -29,7 +28,7 @@
         this.current = name;
         this.app.navbar.setActive(name === 'home' ? null : name);
         document.documentElement.classList.toggle('snap', name === 'home');
-        document.title = TITLES[name];
+        document.title = SOS.i18n.t('title.' + name);
         window.scrollTo(0, 0);
         next.instance.enter(o);
         this.app.narrator.onViewChange(name, !!(o.game || o.char));

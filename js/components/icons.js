@@ -10,6 +10,9 @@
 
   /* ---------- Rubriques ---------- */
   SOS.icons = {
+    atlas: line(
+      '<path d="M12 12a8 8 0 1 1 16 0c0 6-8 15-8 15s-8-9-8-15z"/>' +
+      '<circle cx="20" cy="12" r="2.5" stroke="' + CYAN + '"/>'),
     ville: line(
       '<path d="M8 54h48"/><path d="M12 54V30h14v24"/><path d="M26 54V14h18v40"/><path d="M44 54V34h8v20"/>' +
       '<path d="M31 22h8M31 30h8M31 38h8" stroke="' + CYAN + '"/>'),
@@ -67,6 +70,9 @@
     presentation: fx('<path d="M16 4l2.6 7.4L26 14l-7.4 2.6L16 24l-2.6-7.4L6 14l7.4-2.6z" stroke="' + CYAN + '" fill="#fff"/>'),
     guide: fx('<path d="M5 16h20M18 8l8 8-8 8" stroke="' + CYAN + '"/>'),
     explication: fx('<path d="M11 21c-3-2-4-5-4-8a9 9 0 0 1 18 0c0 3-1 6-4 8v3h-10z" stroke="' + NAVY + '" fill="#fff"/><path d="M13 28h6" stroke="' + CYAN + '"/>'),
+    annonce: fx('<path d="M5 13v6h4l9 5V8l-9 5z" stroke="' + NAVY + '" fill="#fff"/><path d="M22 12a5 5 0 0 1 0 8M25 9a9 9 0 0 1 0 14" stroke="' + CYAN + '"/>'),
+    famille: fx('<path d="M16 26S5 19.5 5 12.2A5.7 5.7 0 0 1 16 10a5.7 5.7 0 0 1 11 2.2C27 19.5 16 26 16 26z" stroke="' + CORAL + '" fill="#fff"/>'),
+    reflexion: fx('<path d="M12 12a4.2 4.2 0 1 1 6.4 3.6c-1.6 1-2.4 1.8-2.4 3.4" stroke="' + NAVY + '"/><path d="M16 25h.01" stroke="' + CYAN + '" stroke-width="3.4"/>'),
     encouragement: fx('<path d="M16 4l3.5 7.6 8 .9-6 5.5 1.7 8L16 22l-7.2 3.9 1.7-8-6-5.5 8-.9z" stroke="' + CORAL + '" fill="#fff"/>')
   };
 })();

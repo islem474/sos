@@ -1,4 +1,4 @@
-/* navbar.js — Barre de navigation fixe : VILLE / JEUX / QUIZ & SENSIBILISATION */
+/* navbar.js — Navigation fixe vers la carte, la ville, les jeux et le quiz */
 (function () {
   'use strict';
   const SOS = (window.SOS = window.SOS || {});
@@ -27,6 +27,13 @@
     syncHeight() {
       const h = this.el.offsetHeight;
       if (h) document.documentElement.style.setProperty('--nav-h', h + 'px');
+    }
+
+    relabel(items) {
+      items.forEach((item) => {
+        const b = this.buttons[item.id];
+        if (b) b.querySelector('.nav__label').textContent = item.label;
+      });
     }
 
     button(id) { return this.buttons[id]; }
