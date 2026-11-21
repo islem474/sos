@@ -1,0 +1,49 @@
+/* ==========================================================
+   tokens.css — Variables de la charte graphique SOS
+   Palette de la charte : ne jamais recolorer ni déformer.
+   ========================================================== */
+:root {
+  /* Couleurs */
+  --cyan: #08A9E0;   /* accents, éléments actifs */
+  --navy: #1D3768;   /* titres, texte, actions principales */
+  --coral: #E2556A;  /* chiffres clés, repères (avec modération) */
+  --pale: #EFFAFF;   /* fond principal */
+  --light: #CFEAF5;  /* filets, surfaces secondaires */
+  --white: #FFFFFF;
+  --muted: #4B5F85;  /* texte secondaire (navy éclairci, contraste AA sur blanc et sur fond pâle) */
+
+  /* Typographie : titres en empattement (sobre), texte en sans-serif.
+     À remplacer par la police officielle si elle diffère. */
+  --font: "DM Sans", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+
+  /* Formes : angles discrets */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --r-pill: 999px;
+
+  /* Ombres fines teintées de bleu marine */
+  --shadow-sm: 0 1px 2px rgba(29, 55, 104, 0.06), 0 2px 8px rgba(29, 55, 104, 0.05);
+  --shadow-md: 0 2px 6px rgba(29, 55, 104, 0.08), 0 14px 32px rgba(29, 55, 104, 0.10);
+  --shadow-lg: 0 24px 60px rgba(29, 55, 104, 0.16);
+
+  /* Mesures (--nav-h est ajustée par le JS) */
+  --top-h: 64px;
+  --nav-h: 84px;
+  --m-h: 128px;                    /* hauteur de S.O.Ssi */
+  --m-w: calc(var(--m-h) * 0.703); /* ratio de l'image détourée : jamais déformée */
+
+  --z-topbar: 40;
+  --z-talk: 55;
+  --z-nav: 50;
+  --z-mascot: 60;
+  --z-intro: 100;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 900px) {
+  :root { --top-h: 72px; --nav-h: 92px; --m-h: 176px; }
+}

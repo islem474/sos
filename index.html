@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SOS — Accueil</title>
+  <meta name="description" content="Découvre SOS avec S.O.Ssi, la petite tortue qui te guide : ville interactive, jeux, quiz et sensibilisation.">
+  <meta name="theme-color" content="#EFFAFF">
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/views.css">
+</head>
+<body class="is-intro">
+  <a class="skip" href="#main">Aller au contenu</a>
+
+  <!-- 1. Animation d'introduction : le O du logo s'agrandit et devient la transition -->
+  <div class="intro" id="intro" role="region" aria-label="Animation d’introduction SOS">
+    <span class="intro__letter intro__letter--l" aria-hidden="true">S</span>
+    <span class="intro__letter intro__letter--r" aria-hidden="true">S</span>
+  </div>
+
+  <header class="topbar">
+    <button class="brand" id="brand" type="button" aria-label="SOS — retour à l’accueil">
+      <img class="brand__logo" data-logo alt="" height="36" decoding="async"
+           onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'logo-fallback',textContent:'SOS'}))">
+    </button>
+    <button class="guide-toggle" id="guide-toggle" type="button" aria-pressed="true">
+      <span class="guide-toggle__dot" aria-hidden="true"></span>Guide S.O.Ssi
+    </button>
+  </header>
+
+  <main id="main" tabindex="-1">
+
+    <!-- 2. Page principale : une scène par balayage (défilement avec accroche) -->
+    <div class="view view--home" id="view-home" data-view="home">
+
+      <section class="scene scene--hero" id="hero" data-scene="hero" aria-labelledby="hero-title">
+        <div class="wrap hero">
+          <img class="hero__logo" data-logo data-rise style="--i:0" alt="" height="72" decoding="async"
+               onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'logo-fallback logo-fallback--xl',textContent:'SOS'}))">
+          <h1 id="hero-title" data-rise style="--i:1" data-fill="org.fullName" data-label="nom officiel complet de SOS" data-plain></h1>
+          <p class="hero__lead" data-rise style="--i:2" data-fill="org.tagline" data-hide-empty></p>
+          <div class="hero__cta" data-rise style="--i:3">
+            <button class="btn" type="button" data-go="ville">Explorer la ville</button>
+            <a class="btn btn--ghost" href="#about">Découvrir SOS</a>
+          </div>
+        </div>
+        <div class="scroll-cue" data-rise style="--i:5" aria-hidden="true"><span>Fais défiler</span><i></i></div>
+      </section>
+
+      <section class="scene" id="about" data-scene="about" aria-labelledby="about-title">
+        <div class="wrap">
+          <div class="section__head"><span class="eyebrow">01</span><h2 id="about-title">Qui sommes-nous ?</h2></div>
+          <div class="card card--lead">
+            <p data-fill="org.presentation" data-label="présentation générale et concise de l’organisation"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="family" data-scene="family" aria-labelledby="family-title">
+        <div class="wrap">
+          <div class="section__head"><span class="eyebrow">02</span><h2 id="family-title">Une maison, une équipe</h2></div>
+          <p class="scene__lead">Dans la ville, trois personnes t’expliquent comment SOS accompagne les enfants.</p>
+          <div class="team" id="team"></div>
+        </div>
+      </section>
+
+      <section class="scene" id="infos" data-scene="infos" aria-labelledby="infos-title">
+        <div class="wrap">
+          <div class="section__head"><span class="eyebrow">03</span><h2 id="infos-title">Coordonnées officielles</h2></div>
+          <dl class="infos">
+            <div class="info"><dt>Adresse</dt><dd data-fill="org.contacts.address" data-label="adresse postale"></dd></div>
+            <div class="info"><dt>Téléphone</dt><dd data-fill="org.contacts.phone" data-label="numéro de téléphone"></dd></div>
+            <div class="info"><dt>E-mail</dt><dd data-fill="org.contacts.email" data-label="adresse e-mail"></dd></div>
+            <div class="info"><dt>Horaires</dt><dd data-fill="org.contacts.hours" data-label="horaires d’ouverture"></dd></div>
+            <div class="info"><dt>Site web</dt><dd data-fill="org.contacts.website" data-label="adresse du site"></dd></div>
+            <div class="info"><dt>Réseaux sociaux</dt><dd data-fill="org.contacts.social" data-label="comptes officiels"></dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="scene" id="discover" data-scene="discover" aria-labelledby="discover-title">
+        <div class="wrap">
+          <div class="section__head"><span class="eyebrow">04</span><h2 id="discover-title">Où veux-tu aller ?</h2></div>
+          <div class="go-grid" id="go-grid"></div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Rubrique VILLE -->
+    <div class="view view--ville" id="view-ville" data-view="ville" hidden>
+      <h2 class="sr-only">Ville interactive SOS</h2>
+      <div class="map-hud"><span class="view-badge" id="ville-badge"></span><span class="pill pill--coral" id="ville-stars" aria-live="polite"></span></div>
+      <div class="map" id="map" tabindex="0" role="region" aria-label="Carte de la ville SOS, faire glisser pour explorer">
+        <div class="map__canvas" id="map-canvas">
+          <img class="map__img" src="assets/img/ville.webp" width="1268" height="707" draggable="false"
+               alt="Vue aérienne illustrée de la ville : administration, bâtiment SOS, place avec fontaine, école, aire de jeux et atelier solaire">
+        </div>
+      </div>
+      <!-- Zoom de la carte -->
+      <div class="zoom-ctl" id="zoom-ctl">
+        <button type="button" id="zoom-in" aria-label="Zoomer">+</button>
+        <button type="button" id="zoom-out" aria-label="Dézoomer">−</button>
+      </div>
+
+      <!-- Intérieur d'un bâtiment (ouvert par un zoom depuis la carte) -->
+      <div class="room" id="room" hidden>
+        <div class="room__bar">
+          <button type="button" class="btn btn--sm btn--ghost" id="room-back">← Retour à la ville</button>
+          <h2 class="room__title" id="room-title"></h2>
+          <div class="room__actions" id="room-actions"></div>
+        </div>
+        <div class="room__scroll" id="room-scroll"><div class="room__stage" id="room-stage"></div></div>
+      </div>
+
+      <div class="talk" id="talk" role="dialog" aria-modal="false" aria-labelledby="talk-name" hidden>
+        <div class="talk__avatar" id="talk-avatar" aria-hidden="true"></div>
+        <div class="talk__body">
+          <p class="talk__role"><strong id="talk-name"></strong> <span id="talk-role"></span></p>
+          <p class="talk__text" id="talk-text" aria-live="polite"></p>
+          <p class="talk__source" id="talk-source"></p>
+          <div class="talk__actions">
+            <button type="button" class="btn btn--sm" id="talk-next">Suivant</button>
+            <button type="button" class="btn btn--sm btn--ghost" id="talk-close">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rubrique JEUX -->
+    <div class="view" id="view-jeux" data-view="jeux" hidden>
+      <div class="page">
+        <header class="page__head">
+          <span class="view-badge" id="jeux-badge"></span>
+          <h2>Choisis ton jeu</h2>
+          <p>Deux mini-jeux pour s’amuser. Touche une carte pour démarrer.</p>
+        </header>
+        <div class="picker" id="game-picker">
+          <button class="pick" type="button" data-game="memory" aria-pressed="false">
+            <span class="pick__ico" aria-hidden="true">M</span>
+            <span><strong>Memory</strong><span>Retrouve les paires</span></span>
+          </button>
+          <button class="pick" type="button" data-game="tap" aria-pressed="false">
+            <span class="pick__ico" aria-hidden="true">★</span>
+            <span><strong>Attrape-étoiles</strong><span>20 secondes chrono</span></span>
+          </button>
+        </div>
+        <div class="stage" id="game-stage" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <!-- Rubrique QUIZ & SENSIBILISATION -->
+    <div class="view" id="view-quiz" data-view="quiz" hidden>
+      <div class="page">
+        <header class="page__head">
+          <span class="view-badge" id="quiz-badge"></span>
+          <h2>Apprendre, puis te tester</h2>
+        </header>
+        <div class="tabs" role="tablist" aria-label="Sensibilisation ou quiz">
+          <button class="tab" type="button" role="tab" id="tab-aware" aria-controls="panel-aware" aria-selected="true" data-tab="aware">Sensibilisation</button>
+          <button class="tab" type="button" role="tab" id="tab-quiz" aria-controls="panel-quiz" aria-selected="false" tabindex="-1" data-tab="quiz">Quiz</button>
+        </div>
+        <div class="tab-panel" id="panel-aware" role="tabpanel" aria-labelledby="tab-aware">
+          <div class="aware-list" id="aware-list"></div>
+        </div>
+        <div class="tab-panel" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz" hidden>
+          <div class="stage" id="quiz-stage" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 3. Barre de navigation fixe (construite par js/components/navbar.js) -->
+  <nav class="navbar" id="navbar" aria-label="Rubriques principales"></nav>
+
+  <!-- 4. S.O.Ssi (construit par js/components/mascot.js) -->
+  <div class="mascot" id="mascot"></div>
+
+  <noscript><p style="position:fixed;bottom:0;left:0;right:0;padding:12px;background:#fff;text-align:center">JavaScript est nécessaire pour l’expérience interactive.</p></noscript>
+
+  <script src="js/config/content.js"></script>
+  <script src="js/core/utils.js"></script>
+  <script src="js/components/icons.js"></script>
+  <script src="js/components/rooms.js"></script>
+  <script src="js/components/intro.js"></script>
+  <script src="js/components/navbar.js"></script>
+  <script src="js/components/mascot.js"></script>
+  <script src="js/components/narrator.js"></script>
+  <script src="js/views/home.js"></script>
+  <script src="js/views/city.js"></script>
+  <script src="js/views/games.js"></script>
+  <script src="js/views/quiz.js"></script>
+  <script src="js/core/router.js"></script>
+  <script src="js/core/app.js"></script>
+</body>
+</html>
