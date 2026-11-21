@@ -25,13 +25,35 @@
       this.busy = false;
       this.visitedRooms = new Set();
       this.heard = new Set();
-      $('#ville-badge', root).innerHTML = SOS.icons.ville + 'Ville';
+      this.badge = $('#ville-badge', root);
+      this.badge.innerHTML = SOS.icons.ville + '<span></span>';
+      this.badge.lastChild.textContent = SOS.i18n.t('city.badge');
       this.updateStars();
       this.buildBuildings();
       this.buildStars();
       this.enableDragPan();
       this.enableZoom();
       this.bindRoom();
+    }
+
+    def(id) { return this.app.content.buildings.find((x) => x.id === id); }
+
+    refresh() {
+      this.badge.lastChild.textContent = SOS.i18n.t('city.badge');
+      this.updateStars();
+      this.canvas.querySelectorAll('.bldg').forEach((el) => {
+        const b = this.def(el.dataset.id);
+        if (!b) return;
+        el.setAttribute('aria-label', b.label + SOS.i18n.t(b.room ? 'city.enter' : 'city.touch'));
+        el.querySelector('.bldg__label').textContent = b.label;
+      });
+      this.canvas.querySelectorAll('.mstar').forEach((s) => s.setAttribute('aria-label', SOS.i18n.t('city.starAria')));
+      if (this.roomId) {
+        const open = this.talk.hidden ? null : this.talkChar && this.talkChar.id;
+        this.closeTalk();
+        this.buildRoom(this.app.content.rooms[this.roomId]);
+        if (open) this.openTalk(this.app.content.rooms[this.roomId].chars.find((c) => c.id === open));
+      }
     }
 
     /* ---------- Construction de la carte ---------- */
@@ -49,13 +71,13 @@
         el.style.height = (h / IMG_H) * 100 + '%';
         el.style.setProperty('--bs', (IMG_W / w) * 100 + '% ' + (IMG_H / h) * 100 + '%');
         el.style.setProperty('--bp', (x / (IMG_W - w)) * 100 + '% ' + (y / (IMG_H - h)) * 100 + '%');
-        el.setAttribute('aria-label', b.label + (b.room ? ' : toucher pour entrer' : ' : toucher pour interagir'));
+        el.setAttribute('aria-label', b.label + SOS.i18n.t(b.room ? 'city.enter' : 'city.touch'));
         const label = document.createElement('span');
-        label.className = 'plaque' + (b.room ? ' plaque--enter' : '');
+        label.className = 'bldg__label';
         label.textContent = b.label;
-        label.setAttribute('aria-hidden', 'true');
         el.appendChild(label);
-        el.addEventListener('click', () => this.touch(b, el));
+        if (b.room) { const dot = document.createElement('i'); dot.className = 'bldg__dot'; dot.setAttribute('aria-hidden', 'true'); el.appendChild(dot); }
+        el.addEventListener('click', () => this.touch(this.def(b.id), el));
         el.addEventListener('animationend', () => el.classList.remove('is-hit'));
         this.canvas.appendChild(el);
       });
@@ -69,14 +91,17 @@
         s.textContent = '★';
         s.style.left = (pos[0] / IMG_W) * 100 + '%';
         s.style.top = (pos[1] / IMG_H) * 100 + '%';
-        s.setAttribute('aria-label', 'Étoile cachée : toucher pour la ramasser');
+        s.setAttribute('aria-label', SOS.i18n.t('city.starAria'));
         s.addEventListener('click', () => this.collect(s));
         this.canvas.appendChild(s);
       });
     }
 
     updateStars() {
-      this.starsEl.innerHTML = 'Étoiles : <strong>' + this.found + '/' + this.total + '</strong>';
+      this.starsEl.textContent = SOS.i18n.t('city.stars') + ' ';
+      const n = document.createElement('strong');
+      n.textContent = this.found + '/' + this.total;
+      this.starsEl.appendChild(n);
     }
 
     collect(star) {
@@ -196,12 +221,12 @@
       const el = this.canvas.querySelector('.bldg[data-id="' + b.id + '"]');
       if (el) el.classList.add('is-visited');
       this.root.classList.add('in-room');
-      this.app.narrator.cancelPending();
+      this.app.mascot.hideBubble('replaced');
 
       const finish = () => {
         this.map.style.visibility = 'hidden';
         this.busy = false;
-        if (this.talk.hidden) this.app.narrator.say(def.intro, { pose: 'presentation', autoHide: 12000 });
+        this.app.narrator.say(def.intro, { pose: 'presentation', autoHide: 12000 });
       };
       if (instant || reducedMotion()) {
         this.room.hidden = false;
@@ -245,9 +270,8 @@
     /** Le narrateur propose naturellement un autre lieu */
     suggestNext() {
       const next = this.app.content.buildings.find((b) => b.room && !this.visitedRooms.has(b.room));
-      const text = next
-        ? 'Bien joué ! Et si on allait voir : ' + next.label + ' ? Touche-le sur la carte.'
-        : 'Tu as visité tous les lieux de la ville ! Tu peux aussi jouer ou faire le quiz.';
+      const cl = this.app.content.lines.city;
+      const text = next ? cl.next(next.label) : cl.all;
       this.app.narrator.say(text, { pose: 'guide', autoHide: 9000 });
     }
 
@@ -273,7 +297,7 @@
         b.style.left = c.at[0] + '%';
         b.style.top = c.at[1] + '%';
         b.dataset.id = c.id;
-        b.setAttribute('aria-label', c.label + ' (' + c.role + ') : toucher pour écouter');
+        b.setAttribute('aria-label', c.label + ' (' + c.role + ')' + SOS.i18n.t('city.listen'));
         b.innerHTML = SOS.figure(c.fig) + '<span class="rchar__tag"></span>';
         b.querySelector('.rchar__tag').textContent = c.label;
         b.addEventListener('click', () => this.openTalk(c));
@@ -309,8 +333,7 @@
       this.talk.hidden = false;
       this.talk.classList.remove('is-in'); void this.talk.offsetWidth; this.talk.classList.add('is-in');
       this.app.mascot.hideBubble('replaced');
-      this.app.mascot.show();
-      this.app.mascot.moveTo({ type: 'spot', x: 'right', y: 'bottom' }, { animate: false });
+      this.app.mascot.hide();
       this.renderLine();
       $('#talk-next', this.root).focus({ preventScroll: true });
     }
@@ -320,8 +343,8 @@
       const line = c.lines[this.talkIdx];
       const last = this.talkIdx === c.lines.length - 1;
       $('#talk-text', this.root).textContent = line.text;
-      $('#talk-source', this.root).textContent = line.source ? 'Source : ' + line.source : '';
-      $('#talk-next', this.root).textContent = last ? 'Terminé' : 'Suivant (' + (this.talkIdx + 1) + '/' + c.lines.length + ')';
+      $('#talk-source', this.root).textContent = line.source ? SOS.i18n.t('talk.source') + line.source : '';
+      $('#talk-next', this.root).textContent = last ? SOS.i18n.t('talk.done') : SOS.i18n.t('talk.nextn', { n: this.talkIdx + 1, m: c.lines.length });
     }
 
     nextLine() {
@@ -339,7 +362,7 @@
       const def = this.app.content.rooms[this.roomId];
       if (!def) return;
       if (def.chars.every((c) => this.heard.has(this.roomId + ':' + c.id))) {
-        this.app.narrator.say('Tu as rencontré tout le monde ici. Touche « Retour à la ville » pour continuer ta visite.', { pose: 'encouragement', autoHide: 8000 });
+        this.app.narrator.say(this.app.content.lines.city.met, { pose: 'encouragement', autoHide: 8000 });
       }
     }
 

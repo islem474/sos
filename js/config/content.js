@@ -11,6 +11,8 @@
        RÈGLE : on n'écrit ici que ce qui est vérifié. Chaque phrase renvoie à sa source (SRC-x, voir
        la liste « sources » plus bas). Les champs vides ('') s'affichent « À renseigner » : ils attendent
        les données officielles de SOS (adresse, téléphone, e-mail, horaires, site, réseaux). */
+    hero: { subtitle: 'Une visite interactive, guidée par S.O.Ssi.' },
+
     org: {
       name: 'SOS',
       fullName: 'SOS Villages d’Enfants Tunisie',            // SRC-1, SRC-2, SRC-3
@@ -33,7 +35,7 @@
     mascot: {
       name: 'S.O.Ssi',
       src: 'assets/img/sossi.webp',   // image officielle, détourée (fond transparent)
-      alt: 'S.O.Ssi, la petite tortue verte avec un sac à dos',
+      alt: 'S.O.Ssi, la petite tortue verte en gilet bleu SOS qui fait un signe de la main',
       /* Autres états de S.O.Ssi : déposer ici d'autres images détourées pour remplacer l'image de base
          selon la pose (accueil, presentation, guide, explication, encouragement). Vide = image de base. */
       poses: {}
@@ -42,15 +44,16 @@
     /* ----- Logo officiel (fichier fourni par SOS) ----- */
     logo: { src: 'assets/img/logo-sos.png', alt: 'SOS Villages d’Enfants' },
 
-    /* ----- Les trois rubriques exactement ----- */
+    /* ----- Rubriques accessibles depuis la barre inférieure ----- */
     nav: [
+      { id: 'atlas', label: 'Carte', icon: 'atlas', desc: 'Découvre les villages SOS sur la carte de Tunisie.' },
       { id: 'ville', label: 'Ville', icon: 'ville', desc: 'Explore la ville SOS et découvre ses lieux.' },
       { id: 'jeux', label: 'Jeux', icon: 'jeux', desc: 'Des mini-jeux pour t’amuser.' },
       { id: 'quiz', label: 'Quiz & sensibilisation', icon: 'quiz', desc: 'Apprends des choses importantes, puis teste-toi.' }
     ],
 
     /* ----- Position de S.O.Ssi dans chaque rubrique -----
-       x : left | center | right   y : top | mid | bottom   peek : il dépasse du bord de l'écran */
+       x : left | center | right   y : top | mid | bottom   peek : placé près du bord, sans le dépasser */
     sides: {
       ville: { x: 'left', y: 'bottom' },
       jeux: { x: 'left', y: 'bottom' },
@@ -58,35 +61,129 @@
     },
 
     /* ----- Paroles de S.O.Ssi -----
-       Page d'accueil : chaque balayage (swipe) fait passer à la scène suivante.
-       S.O.Ssi y apparaît à la première scène qui suit l'ouverture, parle, puis change de
-       position, de pose et de message à chaque nouveau balayage. */
+       Page d'accueil : S.O.Ssi raconte chaque scène et avance automatiquement.
+       Un balayage manuel interrompt le déplacement en cours ; la narration reprend sur la scène atteinte. */
     lines: {
-      scenes: {
-        about: { spot: { x: 'right', y: 'bottom' }, pose: 'accueil',
-          text: 'Salut ! Moi, c’est S.O.Ssi, la petite tortue de SOS. Je t’accompagne pendant la visite. Voici SOS en quelques mots.' },
-        family: { spot: { x: 'left', y: 'bottom' }, pose: 'presentation',
-          text: 'Chez SOS, des enfants grandissent dans une maison, avec une maman. Dans la ville, tu peux rencontrer la maman, le directeur et la psychologue.' },
-        infos: { spot: { x: 'right', y: 'bottom' }, pose: 'guide',
-          text: 'Ici, tu trouves les coordonnées de SOS pour les contacter.' },
-        discover: { spot: { x: 'left', y: 'bottom' }, pose: 'encouragement',
-          text: 'À toi de jouer ! Les trois rubriques sont aussi dans la barre du bas : Ville, Jeux, et Quiz & sensibilisation.' }
+      tour: [
+        { id: 'hero', spot: { x: 0.6, y: 'bottom' },
+          steps: [{ pose: 'accueil', text: 'Bienvenue ! Je suis S.O.Ssi. Je vais te faire découvrir SOS Villages d’Enfants Tunisie et son accompagnement des enfants.' }] },
+        { id: 'hello', phrase: 'Une tortue pour guide', spot: { x: 0.1, y: 'mid' },
+          steps: [
+            { pose: 'accueil', text: 'Salut, moi c’est S.O.Ssi ! Oui, une tortue : je prends mon temps, parce que les belles choses ne se pressent pas.' },
+            { pose: 'reflexion', text: 'Mais ne te fie pas à ma lenteur : je suis prête pour la visite !' },
+            { pose: 'explication', text: 'Regarde mon gilet : le drapeau tunisien, et trois lettres, SOS. Trois lettres pour dire que personne ne devrait grandir sans soutien.' }
+          ] },
+        { id: 'challenge', phrase: 'Un défi à relever', spot: { x: 0.3, y: 'bottom' },
+          steps: [
+            { pose: 'annonce', text: 'Petite annonce : un nouveau défi nous attend !' },
+            { pose: 'explication', text: 'Notre mission : faire découvrir SOS autrement, et sensibiliser avec une expérience interactive plutôt qu’avec un long discours.' },
+            { pose: 'presentation', text: 'Ici, tu explores une ville, tu joues, tu te testes, et tu peux même me poser des questions. On apprend mieux en s’amusant.' },
+            { pose: 'guide', text: 'Pas de panique, je m’occupe de la visite. Toi, tu fais défiler.' }
+          ] },
+        { id: 'sos', phrase: 'Des enfants, une maison', spot: { x: 0.12, y: 'bottom' },
+          steps: [
+            { pose: 'presentation', text: 'Parlons de l’essentiel : SOS Villages d’Enfants Tunisie accompagne des enfants sans soutien familial.' },
+            { pose: 'explication', text: 'Présente en Tunisie depuis les années 1980, l’association a des villages d’enfants, comme Gammarth et Mahrès.' },
+            { pose: 'famille', text: 'Elle propose aussi des familles intégrées dans les quartiers, pour que les enfants grandissent au cœur de la vie de leur ville.' }
+          ] },
+        { id: 'family', phrase: 'Une maison, une équipe', spot: { x: 0.34, y: 'mid' },
+          steps: [
+            { pose: 'famille', text: 'Chez SOS, un enfant grandit dans une maison, avec une maman qui veille sur lui.' },
+            { pose: 'presentation', text: 'Autour d’elle : un directeur qui coordonne les activités, et une psychologue qui offre un espace d’écoute et de confiance.' },
+            { pose: 'guide', text: 'Tu les rencontreras dans la ville. Pas besoin de rendez-vous !' }
+          ] },
+        { id: 'menu', phrase: 'Trois rubriques à explorer', spot: { x: 0.2, y: 'bottom' } }
+      ],
+      hello: {
+        steps: [
+          { pose: 'accueil', text: 'Bonjour, moi c’est S.O.Ssi, la petite tortue de SOS Villages d’Enfants Tunisie. Je serai ton guide pendant toute cette visite.' },
+          { pose: 'presentation', text: 'Je parle, je bouge, et je réponds à tes questions. Tu peux me toucher à tout moment pour en poser une.' }
+        ],
+        ask: {
+          pose: 'guide', text: 'Alors, par où veux-tu commencer ?',
+          actions: [{ id: 'cause', label: 'C’est quoi, SOS ?' }, { id: 'scroll', label: 'Je fais défiler' }]
+        },
+        scroll: 'Parfait ! Fais défiler la page, je te suis.'
+      },
+      cause: {
+        ask: {
+          pose: 'reflexion', answer: 1,
+          text: 'Une petite devinette avant de commencer : d’après toi, que fait SOS Villages d’Enfants ?',
+          options: ['Il organise des voyages scolaires', 'Il accompagne des enfants sans soutien familial', 'Il vend des jouets solidaires']
+        },
+        right: 'Exactement ! Bien vu, tu as déjà compris l’essentiel.',
+        wrong: 'Pas tout à fait, mais bien essayé ! La bonne réponse, c’est : il accompagne des enfants sans soutien familial.',
+        menu: {
+          text: 'Que veux-tu savoir de plus ?',
+          actions: [
+            { id: 'define', label: 'SOS en une phrase' },
+            { id: 'where', label: 'Où est SOS ?' },
+            { id: 'work', label: 'Que fait SOS ?' },
+            { id: 'help', label: 'Comment aider ?' },
+            { id: 'city', label: 'Visiter la ville' },
+            { id: 'done', label: 'C’est bon, merci' }
+          ]
+        },
+        topics: {
+          define: { steps: [
+            { pose: 'explication', text: 'SOS Villages d’Enfants Tunisie accompagne des enfants sans soutien familial.' },
+            { pose: 'famille', text: 'Ce n’est pas seulement un toit : l’enfant grandit dans une maison, avec une maman qui veille sur lui, dans un environnement familial stable et chaleureux.' },
+            { pose: 'presentation', text: 'L’objectif est simple : l’aider à grandir, à apprendre et à devenir autonome.' },
+            { pose: 'encouragement', text: 'Voilà la cause de SOS : qu’aucun enfant ne grandisse sans l’appui d’une famille.' }
+          ] },
+          where: { steps: [
+            { pose: 'presentation', text: 'SOS est présent en Tunisie depuis les années 1980.' },
+            { pose: 'explication', text: 'Il y a des villages d’enfants, comme Gammarth et Mahrès.' },
+            { pose: 'guide', text: 'Il y a aussi des familles intégrées dans les quartiers, avec des bureaux dans le Grand Tunis et à Nabeul.' }
+          ] },
+          work: { steps: [
+            { pose: 'famille', text: 'Dans une maison intégrée du Grand Tunis, on vit à plusieurs : une mère, une tante et quatre enfants.' },
+            { pose: 'explication', text: 'Les bureaux accompagnent les enfants pour l’école, le soutien psychologique et le logement, avec des fournitures scolaires et des bourses.' },
+            { pose: 'presentation', text: 'Depuis 2006, des programmes de renforcement de la famille aident aussi les familles à s’occuper de leurs enfants.' },
+            { pose: 'guide', text: 'Pour les jeunes, il y a des foyers et un centre de formation professionnelle.' }
+          ] },
+          help: { steps: [
+            { pose: 'annonce', text: 'On peut soutenir SOS par des dons, y compris la zakat, ou en parrainant un enfant.' },
+            { pose: 'explication', text: 'Une plateforme en ligne permet aussi de contribuer.' },
+            { pose: 'encouragement', text: 'Et déjà, parler de SOS autour de toi, c’est un premier geste qui compte.' }
+          ] }
+        },
+        end: 'Parfait ! Fais défiler pour continuer la visite, ou touche-moi quand tu veux me poser une autre question.'
+      },
+      langChanged: 'Très bien, on continue en français ! Touche-moi si tu as une question.',
+      menu: {
+        finish: 'Terminer',
+        intro: { pose: 'annonce', text: 'Et maintenant, le menu ! Il vient d’apparaître en bas. Je te présente chaque rubrique, l’une après l’autre.' },
+        items: [
+          { id: 'ville', pose: 'guide', text: 'Ville : une illustration à explorer. Touche les bâtiments, rencontre la maman, le directeur et la psychologue, et retrouve les 5 étoiles cachées.' },
+          { id: 'jeux', pose: 'encouragement', text: 'Jeux : deux mini-jeux, le Memory et l’Attrape-étoiles, avec 20 secondes au chrono.' },
+          { id: 'quiz', pose: 'explication', text: 'Quiz & sensibilisation : tu lis d’abord des messages importants, puis tu te testes.' }
+        ],
+        outro: { pose: 'encouragement', text: 'Voilà, tu sais tout ! Choisis une rubrique quand tu veux. Moi, je reste dans le coin : touche-moi et je réponds à tes questions.' }
       },
       views: {
         ville: {
+          ok: 'Compris',
           first: 'Bienvenue ! Touche les bâtiments, et aussi la maman, le directeur et la psychologue : ils t’expliquent leur rôle. Cherche les 5 étoiles !',
           again: 'Encore des découvertes à faire ? Touche les bâtiments et les personnes !', pose: 'guide'
         },
         jeux: {
+          ok: 'Compris',
           first: 'Voici l’espace de jeux ! Choisis un jeu, je t’explique les règles juste après.',
           again: 'De retour aux jeux ! Choisis ton défi.', pose: 'presentation'
         },
         quiz: {
+          ok: 'Compris',
           first: 'Ici, tu apprends puis tu te testes. Lis la sensibilisation, puis passe à l’onglet Quiz quand tu es prêt.',
           again: 'Sensibilisation ou quiz ? À toi de choisir.', pose: 'explication'
         }
       },
       enabled: 'Me revoilà ! Fais défiler la page ou choisis une rubrique.',
+      city: {
+        next: (label) => 'Bien joué ! Et si on allait voir : ' + label + ' ? Touche-le sur la carte.',
+        all: 'Tu as visité tous les lieux de la ville ! Tu peux aussi jouer ou faire le quiz.',
+        met: 'Tu as rencontré tout le monde ici. Touche « Retour à la ville » pour continuer ta visite.'
+      },
       memory: {
         start: 'Retourne deux cartes. Si elles sont identiques, elles restent visibles. Trouve toutes les paires !',
         win: (n) => 'Bravo, tu as tout trouvé en ' + n + ' coups !'
@@ -108,15 +205,90 @@
       }
     },
 
+    ui: {
+      'skip.main': 'Aller au contenu',
+      'skip.nav': 'Afficher le menu des rubriques',
+      'intro.aria': 'Introduction SOS Villages d’Enfants Tunisie',
+      'brand.aria': 'SOS — retour à l’accueil',
+      'guide': 'Guide S.O.Ssi',
+      'guide.short': 'Guide',
+      'voice.on': 'Voix de S.O.Ssi activée : toucher pour la couper',
+      'voice.off': 'Voix de S.O.Ssi coupée : toucher pour l’activer',
+      'voice.na': 'Voix indisponible dans cette langue sur cet appareil',
+      'lang.aria': 'Choisir la langue',
+      'scroll': 'Fais défiler',
+      'nav.aria': 'Rubriques principales',
+      'mascot.talk': 'Parler avec S.O.Ssi',
+      'bubble.close': 'Fermer la bulle',
+      'noscript': 'JavaScript est nécessaire pour l’expérience interactive.',
+      'title.home': 'SOS — Accueil',
+      'title.ville': 'SOS — Ville',
+      'title.jeux': 'SOS — Jeux',
+      'title.quiz': 'SOS — Quiz & sensibilisation',
+      'meta.desc': 'Découvre SOS avec S.O.Ssi, la petite tortue qui te guide : ville interactive, jeux, quiz et sensibilisation.',
+      'city.sr': 'Ville interactive SOS',
+      'city.map': 'Carte de la ville SOS, faire glisser pour explorer',
+      'city.alt': 'Vue aérienne illustrée de la ville : administration, bâtiment SOS, place avec fontaine, école, aire de jeux et atelier solaire',
+      'city.badge': 'Ville',
+      'city.enter': ' : toucher pour entrer',
+      'city.touch': ' : toucher pour interagir',
+      'city.listen': ' : toucher pour écouter',
+      'city.starAria': 'Étoile cachée : toucher pour la ramasser',
+      'city.stars': 'Étoiles :',
+      'zoom.in': 'Zoomer',
+      'zoom.out': 'Dézoomer',
+      'room.back': '← Retour à la ville',
+      'talk.next': 'Suivant',
+      'talk.close': 'Fermer',
+      'talk.nextn': 'Suivant ({n}/{m})',
+      'talk.done': 'Terminé',
+      'talk.source': 'Source : ',
+      'games.badge': 'Jeux',
+      'games.title': 'Choisis ton jeu',
+      'games.sub': 'Deux mini-jeux pour s’amuser. Touche une carte pour démarrer.',
+      'games.memory': 'Memory',
+      'games.memory.sub': 'Retrouve les paires',
+      'games.tap': 'Attrape-étoiles',
+      'games.tap.sub': '20 secondes chrono',
+      'games.empty': 'Choisis un jeu ci-dessus pour commencer.',
+      'mem.moves': 'Coups :',
+      'mem.replay': 'Rejouer',
+      'mem.group': 'Cartes du memory',
+      'mem.hidden': 'Carte cachée',
+      'mem.found': ', trouvée',
+      'tap.time': 'Temps :',
+      'tap.s': 's',
+      'tap.stars': 'Étoiles :',
+      'tap.intro': 'Touche l’étoile le plus de fois possible !',
+      'tap.go': 'Lancer',
+      'tap.again': 'Rejouer',
+      'tap.done': 'Terminé !',
+      'tap.catch': 'Attraper l’étoile',
+      'quiz.badge': 'Quiz & sensibilisation',
+      'quiz.title': 'Apprendre, puis te tester',
+      'quiz.tabs': 'Sensibilisation ou quiz',
+      'quiz.tab.aware': 'Sensibilisation',
+      'quiz.tab.quiz': 'Quiz',
+      'quiz.q': 'Question',
+      'quiz.score': 'Score :',
+      'quiz.answers': 'Réponses',
+      'quiz.good': 'Bonne réponse. ',
+      'quiz.bad': 'Pas tout à fait. ',
+      'quiz.see': 'Voir mon score',
+      'quiz.next': 'Question suivante',
+      'quiz.over': 'Quiz terminé',
+      'quiz.again': 'Rejouer',
+      'quiz.reread': 'Relire la sensibilisation'
+    },
+
     /* ----- Ville interactive -----
        Chaque bâtiment est une zone de l'illustration : rect = [x, y, largeur, hauteur]
        en pixels de l'image d'origine (1268 x 707).
        anim : 'bounce' | 'honk' | 'glow'   fx : emoji / mot qui s'envole au toucher
        actions : go ('home'|'jeux'|'quiz'), anchor, tab ('aware'|'quiz'), game ('memory'|'tap')  */
     buildings: [
-      { id: 'sos', label: 'Maison - cuisine', room: 'familles', rect: [655, 145, 315, 215], anim: 'bounce', fx: 'SOS',
-        text: 'Voici le bâtiment SOS ! Retrouve ses informations officielles sur la page d’accueil.',
-        actions: [{ label: 'Voir les coordonnées', go: 'home', anchor: 'infos' }] },
+      { id: 'sos', label: 'Maison des familles', room: 'familles', rect: [655, 145, 315, 215], anim: 'bounce', fx: 'SOS',
+        text: 'Voici le bâtiment SOS, la maison des familles.', actions: [] },
       { id: 'admin', label: 'Administration', room: 'admin', rect: [290, 150, 320, 185], anim: 'bounce', fx: '',
         text: 'Voici l’administration de la ville, avec sa grande horloge.', actions: [] },
       { id: 'ecole', label: 'École', room: 'ecole', rect: [985, 335, 278, 170], anim: 'honk', fx: 'Dring !',
@@ -130,10 +302,10 @@
       { id: 'atelier', label: 'Centre des jeunes', room: 'jeunes', rect: [370, 525, 270, 182], anim: 'glow', fx: '',
         text: 'Cet atelier aux panneaux solaires et à la grande fresque parle de sensibilisation.',
         actions: [{ label: 'Lire les messages', go: 'quiz', tab: 'aware' }] },
-      { id: 'maisons', label: 'Maison - salon', room: 'maison', rect: [30, 30, 225, 205], anim: 'glow', fx: '',
+      { id: 'maisons', label: 'Maisons SOS', room: 'maison', rect: [30, 30, 225, 205], anim: 'glow', fx: '',
         text: 'Ici vivent les habitants de la ville. Chaque maison est un foyer.', actions: [] },
-      { id: 'maisons2', label: 'Maison - chambre', room: 'chambre', rect: [1160, 90, 108, 110], anim: 'glow', fx: '',
-        text: 'Encore une maison SOS : découvrons la chambre.', actions: [] },
+      { id: 'maisons2', label: 'Maisons SOS', room: 'maison', rect: [1160, 90, 108, 110], anim: 'glow', fx: '',
+        text: 'Encore des maisons ! Chaque maison est un foyer.', actions: [] },
       { id: 'bus', label: 'Bus scolaire', rect: [995, 555, 125, 80], anim: 'honk', fx: 'Bip bip !',
         text: 'Bip bip ! Le bus scolaire emmène les enfants à l’école.', actions: [] }
     ],
@@ -156,7 +328,7 @@
        fig : apparence du personnage ; at : [x %, y % des pieds] dans la salle. */
     rooms: {
       maison: {
-        title: 'Le salon familial', kind: 'maison',
+        title: 'Une maison SOS', kind: 'maison',
         intro: 'Bienvenue dans une maison ! Touche chaque personnage pour l’écouter. Les prénoms sont fictifs : ce sont des personnages illustratifs.',
         chars: [
           { id: 'mere', label: 'La maman', role: 'Mère d’accueil', at: [47, 90], fig: { skin: '#D9A47C', hair: '#4A2F27', style: 'bun', top: '#E2556A', bottom: '#1D3768' },
@@ -234,8 +406,8 @@
         actions: [{ label: 'Lire les messages', go: 'quiz', tab: 'aware' }] },
 
       familles: {
-        title: 'La cuisine de la maison', kind: 'cuisine',
-        intro: 'Bienvenue dans la cuisine ! Touche la maman pour l’écouter. Ce personnage est fictif.',
+        title: 'La maison des familles', kind: 'familles',
+        intro: 'Ici, on découvre le programme de renforcement de la famille. Touche la maman pour l’écouter.',
         chars: [
           { id: 'maman2', label: 'Une maman', role: 'Personnage fictif', at: [50, 90], fig: { skin: '#E0B08A', hair: '#4A2F27', style: 'long', top: '#08A9E0', bottom: '#1D3768', dress: true },
             lines: [
@@ -244,21 +416,7 @@
               { text: 'Les bureaux aident aussi à améliorer le logement et à renforcer les capacités des familles.', source: 'La Presse, 02/10/2026' }
             ] }
         ],
-        actions: [{ label: 'Voir les coordonnées', go: 'home', anchor: 'infos' }] },
-
-      chambre: {
-        title: 'La chambre des enfants', kind: 'chambre',
-        intro: 'Voici une chambre de la maison. Yasmine et Amine sont des personnages fictifs : touche-les pour les écouter.',
-        chars: [
-          { id: 'yasmine', label: 'Yasmine', role: 'Personnage fictif', at: [38, 91], fig: { skin: '#D9A47C', hair: '#2B2220', style: 'long', top: '#E2556A', bottom: '#1D3768', kid: true },
-            lines: [
-              { text: 'Voici ma chambre : j’aime lire une histoire ou dessiner tranquillement ici.', source: 'Personnage fictif' }
-            ] },
-          { id: 'amine', label: 'Amine', role: 'Personnage fictif', at: [68, 91], fig: { skin: '#C98F66', hair: '#2B2220', style: 'short', top: '#08A9E0', bottom: '#4B5F85', kid: true },
-            lines: [
-              { text: 'On range nos affaires ensemble et on partage les jeux avec toute la famille.', source: 'Personnage fictif' }
-            ] }
-        ] },
+        actions: [] },
 
       jardin: {
         title: 'Le jardin', kind: 'jardin',

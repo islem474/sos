@@ -1,0 +1,91 @@
+/* ==========================================================
+   atlas.css — Ouverture, titre d'accueil, planète des langues,
+   carte de la Tunisie et section « avenir »
+   ========================================================== */
+
+/* ---------- Ouverture : la Tunisie se trace, les quatre villages s'allument ---------- */
+.intro__map { position: absolute; left: 50%; top: 50%; translate: -50% -50%; height: min(78vh, 620px); aspect-ratio: 368 / 752; pointer-events: none; }
+.intro__map svg { width: 100%; height: 100%; overflow: visible; }
+.intro__fill { fill: #fff; opacity: 0; }
+.intro__line { fill: none; stroke: var(--cyan); stroke-width: 2; stroke-linejoin: round; stroke-dasharray: 100; stroke-dashoffset: 100; }
+.intro__dot { fill: var(--coral); stroke: #fff; stroke-width: 2; transform-box: fill-box; transform-origin: center; scale: 0; }
+.intro__pulse { fill: none; stroke: var(--coral); stroke-width: 1.5; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.intro.is-playing .intro__line { animation: i-draw 1.9s cubic-bezier(0.65, 0, 0.35, 1) 0.1s forwards; }
+.intro.is-playing .intro__fill { animation: i-fill 1.2s ease 1.2s forwards; }
+.intro.is-playing .intro__dot { animation: i-dot 0.6s var(--ease-out) var(--d) forwards; }
+.intro.is-playing .intro__pulse { animation: i-pulse 1.4s ease-out calc(var(--d) + 0.3s) 2; }
+@keyframes i-draw { to { stroke-dashoffset: 0; } }
+@keyframes i-fill { to { opacity: 0.8; } }
+@keyframes i-dot { to { scale: 1; } }
+@keyframes i-pulse { from { opacity: 0.7; scale: 1; } to { opacity: 0; scale: 4.5; } }
+.intro__bar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--cyan); transform: scaleX(0); transform-origin: 0 50%; }
+.intro.is-playing .intro__bar { animation: i-bar 3.1s linear forwards; }
+@keyframes i-bar { to { transform: scaleX(1); } }
+.intro__logo { filter: blur(6px); }
+.intro.is-playing .intro__logo { animation: intro-logo 1s var(--ease-out) 0.3s forwards, i-unblur 1s ease 0.3s forwards; }
+@keyframes i-unblur { to { filter: blur(0); } }
+
+/* ---------- Accueil : le titre se dévoile par un masque, pas par un glissement ---------- */
+body.is-ready .hero h1[data-rise] { animation: mask-in 1.2s var(--ease-out) 0.1s both; }
+@keyframes mask-in { from { clip-path: inset(0 0 100% 0); opacity: 0; } to { clip-path: inset(-10% 0 -10% 0); opacity: 1; } }
+body.is-ready [data-rise]:not(h1) { animation: fade-in 1.1s ease both; animation-delay: calc(0.5s + var(--i, 0) * 140ms); }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- Planète des langues ---------- */
+.planet-wrap { position: relative; }
+.planet-btn { display: inline-flex; align-items: center; gap: 7px; height: 40px; padding: 0 12px 0 9px; border: 1px solid var(--light); border-radius: var(--r-md); background: #fff; color: var(--navy); font: 700 0.82rem/1 var(--font); cursor: pointer; }
+.planet-btn:hover, .planet-btn[aria-expanded="true"] { border-color: var(--navy); }
+.planet-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; }
+.planet-btn svg circle { fill: var(--cyan); fill-opacity: 0.18; }
+.planet { position: absolute; top: calc(100% + 12px); inset-inline-end: -6px; width: 252px; aspect-ratio: 1; border-radius: 50%; z-index: 5;
+  background: radial-gradient(circle at 32% 26%, #7fdcfb 0%, var(--cyan) 38%, var(--navy) 100%);
+  box-shadow: inset -16px -20px 44px rgba(10, 24, 56, 0.4), var(--shadow-lg); overflow: hidden;
+  transform-origin: 85% 0; animation: planet-in 0.5s var(--ease-out); }
+.planet[hidden] { display: none; }
+@keyframes planet-in { from { opacity: 0; transform: scale(0.55) rotate(-25deg); } to { opacity: 1; transform: none; } }
+.planet__grid { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: rgba(255, 255, 255, 0.24); stroke-width: 1; animation: planet-turn 40s linear infinite; transform-origin: center; }
+@keyframes planet-turn { to { transform: rotate(360deg); } }
+.planet .lang__btn { position: absolute; left: 50%; translate: -50% -50%; min-width: 132px; min-height: 40px; padding: 0 16px; border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.55); background: rgba(255, 255, 255, 0.14); color: #fff; font-size: 0.95rem; backdrop-filter: blur(2px); }
+.planet .lang__btn:nth-of-type(1) { top: 30%; margin-left: -14px; }
+.planet .lang__btn:nth-of-type(2) { top: 51%; margin-left: 12px; }
+.planet .lang__btn:nth-of-type(3) { top: 72%; margin-left: -10px; }
+.planet .lang__btn:hover { background: rgba(255, 255, 255, 0.3); color: #fff; }
+.planet .lang__btn[aria-pressed="true"] { background: #fff; color: var(--navy); border-color: #fff; box-shadow: 0 6px 18px rgba(10, 24, 56, 0.3); }
+
+/* ---------- Carte de la Tunisie ---------- */
+.atlas { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "map head" "map list"; column-gap: clamp(28px, 7vw, 110px); row-gap: 20px; align-content: center; justify-content: center; }
+.atlas .scene__phrase { grid-area: head; align-self: end; max-width: 14ch; margin-left: 0 !important; }
+.atlas__body { display: contents; }
+.atlas__map { grid-area: map; position: relative; height: min(72vh, 680px); aspect-ratio: 368 / 752; }
+.atlas__map svg { width: 100%; height: 100%; overflow: visible; }
+.atlas__shape { fill: #fff; stroke: var(--cyan); stroke-width: 2; stroke-linejoin: round; filter: drop-shadow(0 18px 28px rgba(29, 55, 104, 0.14)); }
+.pin { position: absolute; translate: -50% -50%; width: 44px; height: 44px; padding: 0; border: 0; background: none; cursor: pointer; }
+.pin__dot { position: absolute; inset: 15px; border-radius: 50%; background: var(--coral); border: 2px solid #fff; box-shadow: var(--shadow-sm); transition: transform 0.35s var(--ease-out); }
+.pin__dot::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 1.5px solid var(--coral); opacity: 0; }
+.pin.is-active .pin__dot { transform: scale(1.5); }
+.pin.is-active .pin__dot::after { animation: pin-pulse 1.6s ease-out infinite; }
+@keyframes pin-pulse { from { opacity: 0.8; scale: 1; } to { opacity: 0; scale: 3.2; } }
+.pin__label { position: absolute; top: 50%; translate: 0 -50%; white-space: nowrap; font: 700 0.9rem/1 var(--font); color: var(--navy); text-shadow: 0 0 6px #fff, 0 0 3px #fff; pointer-events: none; }
+.pin[data-i="0"] .pin__label, .pin[data-i="1"] .pin__label { right: 100%; margin-right: -4px; }
+.pin[data-i="2"] .pin__label, .pin[data-i="3"] .pin__label { left: 100%; margin-left: -4px; }
+.atlas__list { grid-area: list; align-self: start; list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-width: 360px; }
+.vrow { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 14px 4px; border: 0; border-top: 1px solid var(--light); background: none; text-align: start; cursor: pointer; color: var(--navy); transition: padding 0.3s var(--ease-out), background 0.3s; }
+.vrow strong { font: 600 1.25rem/1.2 var(--font-display); }
+.vrow span { font-size: 0.9rem; color: var(--muted); }
+.vrow:hover { padding-inline: 12px; }
+.vrow.is-active { background: var(--navy); color: #fff; padding-inline: 16px; border-radius: var(--r-sm); border-top-color: transparent; }
+.vrow.is-active span { color: var(--light); }
+@media (max-width: 899px) {
+  .atlas { grid-template-columns: 1fr; grid-template-areas: "head" "map" "list"; justify-items: center; text-align: center; }
+  .atlas .scene__phrase { max-width: 20ch; align-self: auto; }
+  .atlas__map { height: min(46vh, 420px); }
+  .atlas__list { grid-template-columns: 1fr 1fr; column-gap: 16px; max-width: 480px; width: 100%; }
+  .pin__label { font-size: 0.8rem; }
+}
+
+/* ---------- Message de conclusion : PAP abordé dans une prochaine étape ---------- */
+#future { background: linear-gradient(140deg, var(--pale), var(--light)); }
+#future .scene__phrase { max-width: 24ch; margin: 0 auto; font-size: clamp(2.2rem, 4.5vw, 3.5rem); text-align: center; }
+
+@media (max-width: 640px) { .planet { width: 232px; } .planet-btn { padding: 0 9px 0 7px; } }

@@ -1,4 +1,4 @@
-/* home.js — Page principale : emplacements à remplir + cartes des rubriques */
+/* home.js — Page principale : titre, puis une scène par balayage (construites depuis content.lines.tour) */
 (function () {
   'use strict';
   const SOS = (window.SOS = window.SOS || {});
@@ -8,37 +8,37 @@
     constructor(root, app) {
       this.root = root;
       this.app = app;
-      this.fillPlaceholders();
-      this.buildTeam();
-      this.buildGoCards();
+      this.fill();
+      this.buildScenes();
     }
 
-    /** Les trois personnages de la ville, présentés sur l'accueil */
-    buildTeam() {
-      const wrap = $('#team', this.root);
-      this.app.content.team.forEach((c) => {
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'member';
-        b.dataset.go = 'ville';
-        b.dataset.char = c.id;
-        b.innerHTML = '<span class="member__av">' + SOS.avatars[c.avatar] + '</span>' +
-          '<span class="member__txt"><strong></strong><span></span></span><span class="member__cta">Rencontrer</span>';
-        b.querySelector('strong').textContent = c.label;
-        b.querySelector('.member__txt span').textContent = c.role;
-        wrap.appendChild(b);
+    side(scene) {
+      const x = scene.spot.x;
+      const left = typeof x === 'number' ? x < 0.5 : x === 'left';
+      const rtl = document.documentElement.dir === 'rtl';
+      return left !== rtl ? 'left' : 'right';
+    }
+
+    refresh() {
+      this.fill();
+      this.app.content.lines.tour.forEach((scene) => {
+        if (scene.id === 'hero') return;
+        const sec = document.getElementById(scene.id);
+        if (!sec) return;
+        sec.dataset.side = this.side(scene);
+        sec.querySelector('h2').textContent = scene.phrase;
       });
     }
 
-    /** Affiche la donnée officielle si elle existe, sinon un emplacement « À renseigner » */
-    fillPlaceholders() {
-      $$('[data-fill]').forEach((el) => {
+    /** Texte officiel s'il existe, sinon l'élément est masqué (accroche) ou affiche « À renseigner » */
+    fill() {
+      $$('[data-fill]', this.root).forEach((el) => {
         const value = resolve(el.dataset.fill);
         el.textContent = '';
         if (value) {
           el.textContent = value;
         } else if (el.hasAttribute('data-hide-empty')) {
-          el.hidden = true;                       // pas d'emplacement visible pour l'accroche tant qu'elle manque
+          el.hidden = true;
         } else {
           const span = document.createElement('span');
           span.className = 'placeholder';
@@ -48,18 +48,20 @@
       });
     }
 
-    buildGoCards() {
-      const grid = $('#go-grid', this.root);
-      this.app.content.nav.forEach((item) => {
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'go-card';
-        b.dataset.go = item.id;
-        b.innerHTML =
-          '<span class="go-card__ico">' + SOS.icons[item.icon] + '</span>' +
-          '<h3>' + item.label + '</h3><p>' + item.desc + '</p>' +
-          '<span class="go-card__cta">Entrer</span>';
-        grid.appendChild(b);
+    /** Une section par scène : seule une phrase, du côté opposé à S.O.Ssi. Il dit le reste. */
+    buildScenes() {
+      this.app.content.lines.tour.forEach((scene) => {
+        if (scene.id === 'hero') return;
+        const side = this.side(scene);
+        const sec = document.createElement('section');
+        sec.className = 'scene scene--tour';
+        sec.id = scene.id;
+        sec.dataset.scene = scene.id;
+        sec.dataset.side = side;
+        sec.setAttribute('aria-labelledby', scene.id + '-title');
+        sec.innerHTML = '<div class="wrap"><h2 class="scene__phrase" id="' + scene.id + '-title"></h2></div>';
+        sec.querySelector('h2').textContent = scene.phrase;
+        this.root.appendChild(sec);
       });
     }
 

@@ -9,14 +9,31 @@
       this.root = root;
       this.app = app;
       this.questions = app.content.quiz;
+      this.ended = false;
       this.stage = $('#quiz-stage', root);
       this.tabs = $$('.tab', root);
       this.panels = { aware: $('#panel-aware', root), quiz: $('#panel-quiz', root) };
       this.current = 'aware';
       this.started = false;
-      $('#quiz-badge', root).innerHTML = SOS.icons.quiz + 'Quiz & sensibilisation';
+      this.badge = $('#quiz-badge', root);
+      this.badge.innerHTML = SOS.icons.quiz + '<span></span>';
+      this.badge.lastChild.textContent = SOS.i18n.t('quiz.badge');
       this.buildAwareness();
       this.bindTabs();
+    }
+
+    refresh() {
+      this.questions = this.app.content.quiz;
+      this.badge.lastChild.textContent = SOS.i18n.t('quiz.badge');
+      $('#aware-list', this.root).textContent = '';
+      this.buildAwareness();
+      if (!this.started) return;
+      if (this.ended) { this.renderEnd(true); return; }
+      const answered = this.locked ? this.picked : null;
+      const idx = this.index;
+      this.renderQuestion();
+      if (answered !== null && answered !== undefined) this.answer(answered, true);
+      this.index = idx;
     }
 
     buildAwareness() {
@@ -62,6 +79,7 @@
 
     restart() {
       this.started = true;
+      this.ended = false;
       this.index = 0;
       this.score = 0;
       this.renderQuestion();
@@ -71,11 +89,15 @@
       const q = this.questions[this.index];
       this.locked = false;
       this.stage.innerHTML =
-        '<div class="stage__head"><p class="pill pill--coral">Question <strong>' + (this.index + 1) + '</strong>/' + this.questions.length + '</p>' +
-        '<p class="pill">Score : <strong>' + this.score + '</strong></p></div>' +
-        '<h3 class="quiz__q"></h3><div class="quiz__opts" role="group" aria-label="Réponses"></div>' +
+        '<div class="stage__head"><p class="pill pill--coral"><span class="qn"></span> <strong>' + (this.index + 1) + '</strong>/' + this.questions.length + '</p>' +
+        '<p class="pill"><span class="qs"></span> <strong>' + this.score + '</strong></p></div>' +
+        '<h3 class="quiz__q"></h3><div class="quiz__opts" role="group"></div>' +
         '<p class="quiz__feedback" role="status"></p><div class="quiz__next"></div>';
+      $('.qn', this.stage).textContent = SOS.i18n.t('quiz.q');
+      $('.qs', this.stage).textContent = SOS.i18n.t('quiz.score');
+      $('.quiz__opts', this.stage).setAttribute('aria-label', SOS.i18n.t('quiz.answers'));
       $('.quiz__q', this.stage).textContent = q.q;
+      this.picked = null;
       const opts = $('.quiz__opts', this.stage);
       q.options.forEach((label, i) => {
         const b = document.createElement('button');
@@ -88,14 +110,15 @@
       });
     }
 
-    answer(i) {
-      if (this.locked) return;
+    answer(i, quiet) {
+      if (this.locked && !quiet) return;
       this.locked = true;
+      this.picked = i;
       const q = this.questions[this.index];
       const buttons = $$('.opt', this.stage);
       const good = i === q.answer;
       const lines = this.app.content.lines.quiz;
-      if (good) this.score++;
+      if (good && !quiet) this.score++;
 
       buttons.forEach((b, k) => {
         b.disabled = true;
@@ -103,32 +126,37 @@
         if (k === q.answer) { b.classList.add('is-correct'); mark.textContent = '✓'; }
         else if (k === i) { b.classList.add('is-wrong'); mark.textContent = '✗'; }
       });
-      $('.quiz__feedback', this.stage).textContent = (good ? 'Bonne réponse. ' : 'Pas tout à fait. ') + q.explain;
+      $('.quiz__feedback', this.stage).textContent = SOS.i18n.t(good ? 'quiz.good' : 'quiz.bad') + q.explain;
 
       const last = this.index === this.questions.length - 1;
       const next = document.createElement('button');
       next.type = 'button';
       next.className = 'btn';
-      next.textContent = last ? 'Voir mon score' : 'Question suivante';
+      next.textContent = SOS.i18n.t(last ? 'quiz.see' : 'quiz.next');
       next.addEventListener('click', () => {
         if (last) this.renderEnd(); else { this.index++; this.renderQuestion(); }
       });
       $('.quiz__next', this.stage).appendChild(next);
+      if (quiet) return;
       next.focus();
 
       this.app.narrator.say(good ? lines.good : lines.bad, { pose: good ? 'encouragement' : 'explication', autoHide: 6000 });
     }
 
-    renderEnd() {
+    renderEnd(quiet) {
       const n = this.questions.length;
+      this.ended = true;
       this.stage.innerHTML =
-        '<div class="stage__head"><h3>Quiz terminé</h3></div>' +
+        '<div class="stage__head"><h3></h3></div>' +
         '<p class="quiz__score">' + this.score + '/' + n + '</p>' +
-        '<div><button type="button" class="btn quiz-again">Rejouer</button> ' +
-        '<button type="button" class="btn btn--ghost quiz-aware">Relire la sensibilisation</button></div>';
+        '<div><button type="button" class="btn quiz-again"></button> ' +
+        '<button type="button" class="btn btn--ghost quiz-aware"></button></div>';
+      $('h3', this.stage).textContent = SOS.i18n.t('quiz.over');
+      $('.quiz-again', this.stage).textContent = SOS.i18n.t('quiz.again');
+      $('.quiz-aware', this.stage).textContent = SOS.i18n.t('quiz.reread');
       $('.quiz-again', this.stage).addEventListener('click', () => this.restart());
       $('.quiz-aware', this.stage).addEventListener('click', () => this.showTab('aware', true));
-      this.app.narrator.say(this.app.content.lines.quiz.end(this.score, n), { pose: 'encouragement', autoHide: 9000 });
+      if (!quiet) this.app.narrator.say(this.app.content.lines.quiz.end(this.score, n), { pose: 'encouragement', autoHide: 9000 });
     }
 
     enter(opts) {

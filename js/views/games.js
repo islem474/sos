@@ -20,17 +20,21 @@
       this.first = null;
       this.lock = false;
       this.stage.innerHTML =
-        '<div class="stage__head"><h3>Memory</h3>' +
-        '<p class="pill">Coups : <strong class="mem-moves">0</strong></p>' +
-        '<button type="button" class="btn btn--ghost btn--sm mem-reset">Rejouer</button></div>' +
-        '<div class="memory" role="group" aria-label="Cartes du memory"></div>';
+        '<div class="stage__head"><h3></h3>' +
+        '<p class="pill"><span class="mem-lbl"></span> <strong class="mem-moves">0</strong></p>' +
+        '<button type="button" class="btn btn--ghost btn--sm mem-reset"></button></div>' +
+        '<div class="memory" role="group"></div>';
+      $('h3', this.stage).textContent = SOS.i18n.t('games.memory');
+      $('.mem-lbl', this.stage).textContent = SOS.i18n.t('mem.moves');
+      $('.mem-reset', this.stage).textContent = SOS.i18n.t('mem.replay');
+      $('.memory', this.stage).setAttribute('aria-label', SOS.i18n.t('mem.group'));
       const grid = $('.memory', this.stage);
       shuffle(symbols.concat(symbols)).forEach((s) => {
         const b = document.createElement('button');
         b.type = 'button';
         b.className = 'mcard';
         b.dataset.key = s.key;
-        b.setAttribute('aria-label', 'Carte cachée');
+        b.setAttribute('aria-label', SOS.i18n.t('mem.hidden'));
         b.innerHTML = '<span class="mcard__face mcard__back" aria-hidden="true"></span>' +
                       '<span class="mcard__face mcard__front" aria-hidden="true">' + s.emoji + '</span>';
         b.addEventListener('click', () => this.flip(b, s));
@@ -56,7 +60,7 @@
       $('.mem-moves', this.stage).textContent = this.moves;
 
       if (a.dataset.key === card.dataset.key) {
-        [a, card].forEach((c) => { c.classList.add('is-matched'); c.setAttribute('aria-label', s.label + ', trouvée'); });
+        [a, card].forEach((c) => { c.classList.add('is-matched'); c.setAttribute('aria-label', s.label + SOS.i18n.t('mem.found')); });
         this.matched++;
         if (this.matched === this.total) {
           this.app.narrator.say(this.app.content.lines.memory.win(this.moves), { pose: 'encouragement', autoHide: 9000 });
@@ -64,7 +68,7 @@
       } else {
         this.lock = true;
         this.timer = setTimeout(() => {
-          [a, card].forEach((c) => { c.classList.remove('is-flipped'); c.setAttribute('aria-label', 'Carte cachée'); });
+          [a, card].forEach((c) => { c.classList.remove('is-flipped'); c.setAttribute('aria-label', SOS.i18n.t('mem.hidden')); });
           this.lock = false;
         }, 800);
       }
@@ -84,16 +88,23 @@
 
     start() {
       this.stage.innerHTML =
-        '<div class="stage__head"><h3>Attrape-étoiles</h3>' +
-        '<p class="pill">Temps : <strong class="tap-time">20</strong> s</p>' +
-        '<p class="pill pill--coral">Étoiles : <strong class="tap-score">0</strong></p></div>' +
+        '<div class="stage__head"><h3></h3>' +
+        '<p class="pill"><span class="t-lbl"></span> <strong class="tap-time">20</strong> <span class="t-s"></span></p>' +
+        '<p class="pill pill--coral"><span class="s-lbl"></span> <strong class="tap-score">0</strong></p></div>' +
         '<div class="tap-area"></div>';
+      const t = SOS.i18n.t;
+      $('h3', this.stage).textContent = t('games.tap');
+      $('.t-lbl', this.stage).textContent = t('tap.time');
+      $('.t-s', this.stage).textContent = t('tap.s');
+      $('.s-lbl', this.stage).textContent = t('tap.stars');
       this.area = $('.tap-area', this.stage);
       this.showIntro();
     }
 
     showIntro() {
-      this.area.innerHTML = '<div><p>Touche l’étoile le plus de fois possible !</p><br><button type="button" class="btn tap-go">Lancer</button></div>';
+      this.area.innerHTML = '<div><p class="tap-msg"></p><br><button type="button" class="btn tap-go"></button></div>';
+      $('.tap-msg', this.area).textContent = SOS.i18n.t('tap.intro');
+      $('.tap-go', this.area).textContent = SOS.i18n.t('tap.go');
       $('.tap-go', this.area).addEventListener('click', () => this.run());
     }
 
@@ -102,7 +113,8 @@
       this.time = 20;
       this.setStat('.tap-score', 0);
       this.setStat('.tap-time', 20);
-      this.area.innerHTML = '<button type="button" class="star" aria-label="Attraper l’étoile">★</button>';
+      this.area.innerHTML = '<button type="button" class="star">★</button>';
+      $('.star', this.area).setAttribute('aria-label', SOS.i18n.t('tap.catch'));
       this.star = $('.star', this.area);
       this.relocate();
       this.star.addEventListener('click', () => {
@@ -127,8 +139,10 @@
 
     end() {
       this.stopTimers();
-      this.area.innerHTML = '<div><p><strong>Terminé !</strong></p><p class="quiz__score">' + this.score + '</p><br>' +
-        '<button type="button" class="btn tap-go">Rejouer</button></div>';
+      this.area.innerHTML = '<div><p><strong class="tap-done"></strong></p><p class="quiz__score">' + this.score + '</p><br>' +
+        '<button type="button" class="btn tap-go"></button></div>';
+      $('.tap-done', this.area).textContent = SOS.i18n.t('tap.done');
+      $('.tap-go', this.area).textContent = SOS.i18n.t('tap.again');
       $('.tap-go', this.area).addEventListener('click', () => this.run());
       this.app.narrator.say(this.app.content.lines.tap.end(this.score), { pose: 'encouragement', autoHide: 9000 });
     }
@@ -146,18 +160,27 @@
       this.app = app;
       this.stage = $('#game-stage', root);
       this.picks = $$('.pick', root);
-      $('#jeux-badge', root).innerHTML = SOS.icons.jeux + 'Jeux';
+      this.badge = $('#jeux-badge', root);
+      this.badge.innerHTML = SOS.icons.jeux + '<span></span>';
+      this.badge.lastChild.textContent = SOS.i18n.t('games.badge');
       this.picks.forEach((b) => b.addEventListener('click', () => this.open(b.dataset.game)));
       this.close();
     }
 
-    open(id) {
+    open(id, quiet) {
       this.destroyGame();
+      this.current = id;
       this.picks.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.game === id)));
       this.game = new GAMES[id](this.stage, this.app);
       this.game.start();
       const l = this.app.content.lines[id];
-      this.app.narrator.say(l.start, { pose: 'explication', autoHide: 12000 });
+      if (!quiet) this.app.narrator.say(l.start, { pose: 'explication', autoHide: 12000 });
+    }
+
+    refresh() {
+      this.badge.lastChild.textContent = SOS.i18n.t('games.badge');
+      if (this.game) { const id = this.current; this.destroyGame(); this.open(id, true); }
+      else this.stage.innerHTML = '<p class="empty"></p>', $('.empty', this.stage).textContent = SOS.i18n.t('games.empty');
     }
 
     destroyGame() {
@@ -167,7 +190,8 @@
     close() {
       this.destroyGame();
       this.picks.forEach((b) => b.setAttribute('aria-pressed', 'false'));
-      this.stage.innerHTML = '<p class="empty">Choisis un jeu ci-dessus pour commencer.</p>';
+      this.stage.innerHTML = '<p class="empty"></p>';
+      $('.empty', this.stage).textContent = SOS.i18n.t('games.empty');
     }
 
     enter(opts) { if (opts && opts.game) this.open(opts.game); }
