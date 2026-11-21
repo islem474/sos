@@ -31,6 +31,7 @@ sos-site/
       ├─ city.js               class CityView  : lieux cliquables sur l'image
       ├─ games.js              MemoryGame, TapGame, GamesView
       └─ quiz.js               class QuizView  : onglets, sensibilisation, quiz
+      ├─ help.js               class HelpView  : « Comment je peux aider » (ciel étoilé, PAP) ; textes : config/help.js
 ```
 
 ## À fournir / remplacer

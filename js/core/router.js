@@ -4,7 +4,7 @@
   const SOS = (window.SOS = window.SOS || {});
   const { reducedMotion } = SOS.utils;
 
-  const TITLES = { home: 'SOS — Accueil', ville: 'SOS — Ville', jeux: 'SOS — Jeux', quiz: 'SOS — Quiz & sensibilisation' };
+  const TITLES = { home: 'SOS — Accueil', ville: 'SOS — Ville', jeux: 'SOS — Jeux', quiz: 'SOS — Quiz & sensibilisation', aider: 'SOS — Comment je peux aider' };
 
   class Router {
     constructor(app, views) {
@@ -27,6 +27,7 @@
         void next.el.offsetWidth;
         next.el.classList.add('is-entering');
         this.current = name;
+        document.body.dataset.view = name;
         this.app.navbar.setActive(name === 'home' ? null : name);
         document.documentElement.classList.toggle('snap', name === 'home');
         document.title = TITLES[name];

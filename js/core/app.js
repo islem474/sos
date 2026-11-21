@@ -22,7 +22,8 @@
         home: make('home', SOS.HomeView),
         ville: make('ville', SOS.CityView),
         jeux: make('jeux', SOS.GamesView),
-        quiz: make('quiz', SOS.QuizView)
+        quiz: make('quiz', SOS.QuizView),
+        aider: make('aider', SOS.HelpView)
       });
 
       this.bindUi();

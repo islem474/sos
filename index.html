@@ -9,11 +9,15 @@
   <script>document.documentElement.classList.add('js');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/views.css">
+  <link rel="stylesheet" href="css/pro.css">
+  <link rel="stylesheet" href="css/games-ui.css">
+  <link rel="stylesheet" href="css/learn-ui.css">
+  <link rel="stylesheet" href="css/help-ui.css">
 </head>
 <body class="is-intro">
   <a class="skip" href="#main">Aller au contenu</a>
@@ -134,45 +138,41 @@
     </div>
 
     <!-- Rubrique JEUX -->
-    <div class="view" id="view-jeux" data-view="jeux" hidden>
-      <div class="page">
+    <div class="view view--jeux" id="view-jeux" data-view="jeux" hidden>
+      <div class="page page--games">
         <header class="page__head">
           <span class="view-badge" id="jeux-badge"></span>
-          <h2>Choisis ton jeu</h2>
-          <p>Deux mini-jeux pour s’amuser. Touche une carte pour démarrer.</p>
+          <h2>La salle de jeux</h2>
+          <p>Choisis ton âge, touche un jeu et c’est parti !</p>
         </header>
-        <div class="picker" id="game-picker">
-          <button class="pick" type="button" data-game="memory" aria-pressed="false">
-            <span class="pick__ico" aria-hidden="true">M</span>
-            <span><strong>Memory</strong><span>Retrouve les paires</span></span>
-          </button>
-          <button class="pick" type="button" data-game="tap" aria-pressed="false">
-            <span class="pick__ico" aria-hidden="true">★</span>
-            <span><strong>Attrape-étoiles</strong><span>20 secondes chrono</span></span>
-          </button>
-        </div>
-        <div class="stage" id="game-stage" aria-live="polite"></div>
+        <div class="g-picker" id="game-picker"></div>
+        <div class="g-stage" id="game-stage"></div>
       </div>
     </div>
 
-    <!-- Rubrique QUIZ & SENSIBILISATION -->
-    <div class="view" id="view-quiz" data-view="quiz" hidden>
-      <div class="page">
+    <!-- Rubrique QUIZ & SENSIBILISATION : Apprendre, Scénarios, Quiz -->
+    <div class="view view--quiz" id="view-quiz" data-view="quiz" data-tab="aware" hidden>
+      <div class="page page--learn">
         <header class="page__head">
           <span class="view-badge" id="quiz-badge"></span>
-          <h2>Apprendre, puis te tester</h2>
+          <h2>Comprendre, s’entraîner, se tester</h2>
+          <p>Découvre ce que fait SOS, mets-toi en situation, puis vérifie ce que tu as retenu.</p>
         </header>
-        <div class="tabs" role="tablist" aria-label="Sensibilisation ou quiz">
-          <button class="tab" type="button" role="tab" id="tab-aware" aria-controls="panel-aware" aria-selected="true" data-tab="aware">Sensibilisation</button>
-          <button class="tab" type="button" role="tab" id="tab-quiz" aria-controls="panel-quiz" aria-selected="false" tabindex="-1" data-tab="quiz">Quiz</button>
+        <div class="tabs tabs--3" role="tablist" aria-label="Apprendre, scénarios ou quiz">
+          <button class="tab" type="button" role="tab" id="tab-aware" aria-controls="panel-aware" aria-selected="true" data-tab="aware"><i>1</i>Apprendre</button>
+          <button class="tab" type="button" role="tab" id="tab-scen" aria-controls="panel-scen" aria-selected="false" tabindex="-1" data-tab="scen"><i>2</i>Scénarios</button>
+          <button class="tab" type="button" role="tab" id="tab-quiz" aria-controls="panel-quiz" aria-selected="false" tabindex="-1" data-tab="quiz"><i>3</i>Quiz</button>
         </div>
-        <div class="tab-panel" id="panel-aware" role="tabpanel" aria-labelledby="tab-aware">
-          <div class="aware-list" id="aware-list"></div>
-        </div>
-        <div class="tab-panel" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz" hidden>
-          <div class="stage" id="quiz-stage" aria-live="polite"></div>
-        </div>
+        <div class="tab-panel" id="panel-aware" role="tabpanel" aria-labelledby="tab-aware"><div class="learn" id="learn-stage"></div></div>
+        <div class="tab-panel" id="panel-scen" role="tabpanel" aria-labelledby="tab-scen" hidden><div class="stage2" id="scen-stage"></div></div>
+        <div class="tab-panel" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz" hidden><div class="stage2" id="quiz-stage"></div></div>
       </div>
+    </div>
+
+    <!-- Rubrique COMMENT JE PEUX AIDER : le ciel étoilé et le PAP -->
+    <div class="view view--aider" id="view-aider" data-view="aider" hidden>
+      <h2 class="sr-only">Comment je peux aider : le PAP et le ciel étoilé</h2>
+      <div class="sky" id="sky"></div>
     </div>
 
   </main>
@@ -186,6 +186,8 @@
   <noscript><p style="position:fixed;bottom:0;left:0;right:0;padding:12px;background:#fff;text-align:center">JavaScript est nécessaire pour l’expérience interactive.</p></noscript>
 
   <script src="js/config/content.js"></script>
+  <script src="js/config/learn.js"></script>
+  <script src="js/config/help.js"></script>
   <script src="js/core/utils.js"></script>
   <script src="js/components/icons.js"></script>
   <script src="js/components/rooms.js"></script>
@@ -197,6 +199,7 @@
   <script src="js/views/city.js"></script>
   <script src="js/views/games.js"></script>
   <script src="js/views/quiz.js"></script>
+  <script src="js/views/help.js"></script>
   <script src="js/core/router.js"></script>
   <script src="js/core/app.js"></script>
 </body>

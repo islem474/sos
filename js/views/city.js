@@ -51,10 +51,10 @@
         el.style.setProperty('--bp', (x / (IMG_W - w)) * 100 + '% ' + (y / (IMG_H - h)) * 100 + '%');
         el.setAttribute('aria-label', b.label + (b.room ? ' : toucher pour entrer' : ' : toucher pour interagir'));
         const label = document.createElement('span');
-        label.className = 'plaque' + (b.room ? ' plaque--enter' : '');
+        label.className = 'bldg__label';
         label.textContent = b.label;
-        label.setAttribute('aria-hidden', 'true');
         el.appendChild(label);
+        if (b.room) { const dot = document.createElement('i'); dot.className = 'bldg__dot'; dot.setAttribute('aria-hidden', 'true'); el.appendChild(dot); }
         el.addEventListener('click', () => this.touch(b, el));
         el.addEventListener('animationend', () => el.classList.remove('is-hit'));
         this.canvas.appendChild(el);
@@ -196,12 +196,12 @@
       const el = this.canvas.querySelector('.bldg[data-id="' + b.id + '"]');
       if (el) el.classList.add('is-visited');
       this.root.classList.add('in-room');
-      this.app.narrator.cancelPending();
+      this.app.mascot.hideBubble('replaced');
 
       const finish = () => {
         this.map.style.visibility = 'hidden';
         this.busy = false;
-        if (this.talk.hidden) this.app.narrator.say(def.intro, { pose: 'presentation', autoHide: 12000 });
+        this.app.narrator.say(def.intro, { pose: 'presentation', autoHide: 12000 });
       };
       if (instant || reducedMotion()) {
         this.room.hidden = false;
@@ -309,8 +309,7 @@
       this.talk.hidden = false;
       this.talk.classList.remove('is-in'); void this.talk.offsetWidth; this.talk.classList.add('is-in');
       this.app.mascot.hideBubble('replaced');
-      this.app.mascot.show();
-      this.app.mascot.moveTo({ type: 'spot', x: 'right', y: 'bottom' }, { animate: false });
+      this.app.mascot.hide();
       this.renderLine();
       $('#talk-next', this.root).focus({ preventScroll: true });
     }
