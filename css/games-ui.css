@@ -1,0 +1,83 @@
+/* games-ui.css — Salle de jeux v2 : hub en cartes, progression, écran de partie */
+.view--jeux .page--games { max-width: 1180px; }
+.view--jeux .page__head { margin-bottom: 8px; }
+
+/* Bandeau progression + niveau */
+.g-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 28px;
+  padding: 14px 18px; border-radius: calc(var(--gr) + 6px); background: rgba(255,255,255,.08); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.g-prog { display: flex; align-items: center; gap: 16px; }
+.g-prog p { display: grid; gap: 2px; } .g-prog strong { font-size: 1.05rem; } .g-prog span { font-size: .84rem; color: rgba(255,255,255,.72); }
+.g-ring { --p: 0; position: relative; display: grid; place-items: center; width: 62px; height: 62px; border-radius: 50%;
+  background: conic-gradient(var(--acc) calc(var(--p) * 1%), rgba(255,255,255,.16) 0); }
+.g-ring::before { content: ""; position: absolute; inset: 7px; border-radius: 50%; background: var(--bg1); }
+.g-ring b { position: relative; font: 800 1.25rem/1 var(--font-display); } .g-ring small { font-size: .75rem; opacity: .7; }
+.g-top .g-seg { margin: 0; }
+
+/* Chemin des étoiles */
+.gsky { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: clamp(16px, 3vw, 36px); align-items: center; margin-top: 18px; }
+.gpath { position: relative; width: 100%; }
+.gpath svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.gpath__line { fill: none; stroke: rgba(255,255,255,.55); stroke-width: 3; stroke-dasharray: 2 14; stroke-linecap: round; vector-effect: non-scaling-stroke; animation: gflow 1.6s linear infinite; }
+.gpath__glow { fill: none; stroke: var(--acc); stroke-opacity: .22; stroke-width: 16; stroke-linecap: round; vector-effect: non-scaling-stroke; filter: blur(5px); }
+@keyframes gflow { to { stroke-dashoffset: -16; } }
+.gn { position: absolute; display: grid; justify-items: center; gap: 8px; padding: 0; border: 0; background: none; color: #fff; cursor: pointer; transform: translate(-50%, -50%); animation: gn-in .6s var(--ease-out) both; animation-delay: calc(var(--i) * 80ms); }
+@keyframes gn-in { from { opacity: 0; transform: translate(-50%, -30%) scale(.5); } }
+.gn__orb { position: relative; display: grid; place-items: center; width: clamp(58px, 7.6vw, 84px); aspect-ratio: 1; border-radius: 50%; font-size: clamp(1.5rem, 3.2vw, 2.3rem);
+  background: radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--c) 55%, #fff), var(--c) 62%, color-mix(in srgb, var(--c) 60%, #000));
+  box-shadow: 0 0 0 4px rgba(255,255,255,.18), 0 0 26px color-mix(in srgb, var(--c) 70%, transparent), 0 10px 20px rgba(0,0,0,.3); transition: transform .35s var(--ease-out), box-shadow .35s; }
+.gn:hover .gn__orb { transform: scale(1.12); }
+.gn__name { max-width: 110px; padding: 3px 10px; border-radius: 99px; background: rgba(12,23,54,.55); backdrop-filter: blur(6px); font: 700 .8rem/1.2 var(--font); text-align: center; text-wrap: balance; opacity: .85; transition: opacity .25s, background .25s, color .25s; }
+.gn.is-done .gn__orb::after { content: "★"; position: absolute; right: -4px; top: -4px; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #fff; color: var(--coral); font-size: .8rem; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+.gn[aria-current="true"] { z-index: 2; } .gn[aria-current="true"] .gn__orb { transform: scale(1.22); box-shadow: 0 0 0 5px #fff, 0 0 0 12px color-mix(in srgb, var(--c) 40%, transparent), 0 0 50px var(--c), 0 12px 24px rgba(0,0,0,.35); animation: gpulse 2s ease-in-out infinite; }
+.gn[aria-current="true"] .gn__name { background: #fff; color: var(--navy); opacity: 1; }
+@keyframes gpulse { 50% { box-shadow: 0 0 0 5px #fff, 0 0 0 20px color-mix(in srgb, var(--c) 18%, transparent), 0 0 60px var(--c), 0 12px 24px rgba(0,0,0,.35); } }
+.gpath__mascot { position: absolute; z-index: 3; width: clamp(34px, 4.6vw, 54px); height: auto; pointer-events: none; transform: translate(-50%, -190%); filter: drop-shadow(0 6px 8px rgba(0,0,0,.35)); transition: left .7s var(--ease-out), top .7s var(--ease-out); animation: gbob 2.2s ease-in-out infinite; }
+@keyframes gbob { 50% { margin-top: -6px; } }
+
+/* Panneau du jeu choisi */
+.gdock { --c: var(--acc); position: relative; display: grid; gap: 10px; justify-items: start; padding: 24px 24px 26px; border-radius: calc(var(--gr) + 8px); color: #fff;
+  background: linear-gradient(160deg, rgba(255,255,255,.16), rgba(255,255,255,.05)); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2), 0 30px 60px rgba(0,0,0,.3); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.gdock::before { content: ""; position: absolute; inset: 0 0 auto; height: 5px; border-radius: 99px; background: var(--c); }
+.gdock__ico { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; background: color-mix(in srgb, var(--c) 35%, transparent); font-size: 2rem; box-shadow: inset 0 0 0 1px rgba(255,255,255,.25); }
+.gdock h3 { font: 800 1.7rem/1.1 var(--font-display); letter-spacing: -.02em; } .gdock p { color: rgba(255,255,255,.82); font-size: .96rem; line-height: 1.5; }
+.gdock .g-tag { background: rgba(255,255,255,.14); color: #fff; box-shadow: none; }
+.gdock__lv b { display: inline-block; margin-right: 8px; padding: 1px 10px; border-radius: 99px; background: var(--c); color: #fff; font-size: .78rem; }
+.gdock__rec { color: #fff !important; font-weight: 600; } .gdock__rec b { color: #ffd0d7; }
+.g-play { margin-top: 6px; min-height: 52px; padding: 0 34px; font-size: 1.05rem; } .g-play span { font-size: .75rem; margin-left: 4px; }
+
+/* Écran de partie */
+.g-bar { padding: 8px 8px 8px 12px; border-radius: 999px; background: rgba(255,255,255,.08); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.g-bar h3 { font-size: 1.2rem; }
+.g-chip { backdrop-filter: blur(8px); }
+.g-canvas { box-shadow: 0 0 0 6px rgba(255,255,255,.1), 0 0 70px color-mix(in srgb, var(--acc) 45%, transparent), 0 30px 60px rgba(0,0,0,.35); }
+.g-over__card { animation: pop .5s var(--ease-out); } @keyframes pop { from { opacity: 0; transform: scale(.85) translateY(20px); } }
+.g-over__best { animation: pulse 1.2s ease-in-out infinite; } @keyframes pulse { 50% { transform: scale(1.07); } }
+.g-confetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 6; }
+.g-confetti i { position: absolute; top: -14px; left: var(--x); width: 9px; height: 14px; border-radius: 2px; animation: confetti 2.6s var(--d) ease-in forwards; }
+@keyframes confetti { to { transform: translateY(110vh) rotate(var(--r)); opacity: .9; } }
+
+@media (max-width: 760px) {
+  .g-top { padding: 12px; } .g-top .g-seg { width: 100%; } .g-seg button { padding: 8px 12px; }
+  .gsky { grid-template-columns: 1fr; gap: 6px; } .gpath { max-width: 420px; margin: 0 auto; }
+  .gdock { position: sticky; bottom: calc(var(--nav-h) + 12px); z-index: 5; grid-template-columns: auto 1fr; gap: 4px 14px; align-items: center; padding: 16px; background: rgba(12,23,54,.82); }
+  .gdock__ico { grid-row: span 3; width: 52px; height: 52px; font-size: 1.6rem; } .gdock p:not(.gdock__lv):not(.gdock__rec), .gdock .g-tag { display: none; } .gdock h3 { font-size: 1.25rem; }
+  .gdock .g-play { grid-column: 1 / -1; width: 100%; justify-content: center; }
+}
+.view--jeux:not(.is-playing) .page__head h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); } .view--jeux .page__head p { margin-top: 6px; }
+@media (min-width: 761px) {
+  .view--jeux:not(.is-playing) .page__head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; margin-bottom: 0; }
+  .view--jeux:not(.is-playing) .page__head h2 { font-size: 2rem; } .view--jeux:not(.is-playing) .page__head h2::after { display: none; }
+  .view--jeux:not(.is-playing) .page__head p { margin: 0; flex-basis: 100%; }
+  .view--jeux .page { padding-top: calc(var(--top-h) - 6px); }
+  .gsky { margin-top: 8px; align-items: start; } .gdock { padding: 20px 22px 22px; } .gdock h3 { font-size: 1.5rem; }
+  .gpath { margin-top: 24px; }
+}
+@media (max-width: 760px) {
+  .view--jeux:not(.is-playing) .page__head p, .view--jeux:not(.is-playing) .page__head h2::after { display: none; }
+  .view--jeux:not(.is-playing) .page__head h2 { font-size: 1.7rem; }
+  .g-prog { gap: 12px; } .g-ring { width: 50px; height: 50px; } .g-ring::before { inset: 6px; } .g-prog strong { font-size: .95rem; }
+  .gpath { margin-top: 8px; margin-bottom: 120px; }
+}
+
+/* Page Jeux : seule la petite tortue du chemin reste (le guide est masqué) */
+body[data-view="jeux"] .mascot, body[data-view="jeux"] .guide-toggle, body[data-view="jeux"] .talk { display: none !important; }

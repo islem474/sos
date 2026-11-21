@@ -15,7 +15,7 @@
   /* Typographie : titres en empattement (sobre), texte en sans-serif.
      À remplacer par la police officielle si elle diffère. */
   --font: "DM Sans", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --font-display: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
 
   /* Formes : angles discrets */
   --r-sm: 8px;

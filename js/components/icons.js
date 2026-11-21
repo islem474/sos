@@ -21,7 +21,10 @@
       '<circle cx="42" cy="30" r="2.2" fill="' + CYAN + '" stroke="' + CYAN + '"/><circle cx="48" cy="36" r="2.2" fill="' + CYAN + '" stroke="' + CYAN + '"/>'),
     quiz: line(
       '<path d="M10 14h44a2 2 0 0 1 2 2v26a2 2 0 0 1-2 2H30l-12 10V44h-8a2 2 0 0 1-2-2V16a2 2 0 0 1 2-2z"/>' +
-      '<path d="M26 26a6 6 0 1 1 8 5.6c-1.4.6-2 1.6-2 3" stroke="' + CYAN + '"/><circle cx="32" cy="38.5" r="1.2" fill="' + CYAN + '" stroke="' + CYAN + '"/>')
+      '<path d="M26 26a6 6 0 1 1 8 5.6c-1.4.6-2 1.6-2 3" stroke="' + CYAN + '"/><circle cx="32" cy="38.5" r="1.2" fill="' + CYAN + '" stroke="' + CYAN + '"/>'),
+    aider: line(
+      '<path d="M32 56C12 42 8 28 13 20c4-7 14-7 19 1 5-8 15-8 19-1 5 8 1 22-19 36z"/>' +
+      '<path d="M32 22l2.4 5 5.4.7-4 3.8 1 5.4-4.8-2.6-4.8 2.6 1-5.4-4-3.8 5.4-.7z" stroke="' + CYAN + '"/>')
   };
 
   /* ---------- Avatars (illustrations génériques de rôles, pas de vraies personnes) ---------- */

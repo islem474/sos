@@ -9,12 +9,16 @@
   <script>document.documentElement.classList.add('js');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Cairo:wght@400;600;700&family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/views.css">
   <link rel="stylesheet" href="css/atlas.css">
+  <link rel="stylesheet" href="css/pro.css">
+  <link rel="stylesheet" href="css/games-ui.css">
+  <link rel="stylesheet" href="css/learn-ui.css">
+  <link rel="stylesheet" href="css/help-ui.css">
 </head>
 <body class="is-intro at-hero">
   <a class="skip" href="#main" data-i18n="skip.main">Aller au contenu</a>
@@ -31,7 +35,6 @@
       <span class="intro__rule" id="intro-rule" aria-hidden="true"></span>
     </div>
     <span class="intro__bar" aria-hidden="true"></span>
-</div>
   </div>
 
   <header class="topbar">
@@ -107,6 +110,7 @@
         <div class="room__bar">
           <button type="button" class="btn btn--sm btn--ghost" id="room-back" data-i18n="room.back">← Retour à la ville</button>
           <h2 class="room__title" id="room-title"></h2>
+          <div class="room__variants" id="room-variants" role="tablist" aria-label="Modèles de maison" hidden></div>
           <div class="room__actions" id="room-actions"></div>
         </div>
         <div class="room__scroll" id="room-scroll"><div class="room__stage" id="room-stage"></div></div>
@@ -116,10 +120,13 @@
         <div class="talk__avatar" id="talk-avatar" aria-hidden="true"></div>
         <div class="talk__body">
           <p class="talk__role"><strong id="talk-name"></strong> <span id="talk-role"></span></p>
-          <p class="talk__text" id="talk-text" aria-live="polite"></p>
+          <p class="talk__bio" id="talk-bio"></p>
+          <p class="talk__text" id="talk-text" aria-hidden="true"></p>
+          <p class="sr-only" id="talk-announcement" aria-live="polite"></p>
           <p class="talk__source" id="talk-source"></p>
           <div class="talk__actions">
             <button type="button" class="btn btn--sm" id="talk-next" data-i18n="talk.next">Suivant</button>
+            <div class="talk__choices" id="talk-choices" role="group" aria-label="Choisis un sujet à écouter" hidden></div>
             <button type="button" class="btn btn--sm btn--ghost" id="talk-close" data-i18n="talk.close">Fermer</button>
           </div>
         </div>
@@ -149,23 +156,33 @@
     </div>
 
 
-    <div class="view" id="view-quiz" data-view="quiz" hidden>
-      <div class="page">
+    <div class="view view--quiz" id="view-quiz" data-view="quiz" data-tab="aware" hidden>
+      <div class="page page--learn">
         <header class="page__head">
           <span class="view-badge" id="quiz-badge"></span>
-          <h2 data-i18n="quiz.title">Apprendre, puis te tester</h2>
+          <h2>Comprendre, s’entraîner, se tester</h2>
+          <p>Découvre ce que fait SOS, mets-toi en situation, puis vérifie ce que tu as retenu.</p>
         </header>
-        <div class="tabs" role="tablist" data-i18n-attr="aria-label:quiz.tabs">
-          <button class="tab" type="button" role="tab" id="tab-aware" aria-controls="panel-aware" aria-selected="true" data-tab="aware" data-i18n="quiz.tab.aware">Sensibilisation</button>
-          <button class="tab" type="button" role="tab" id="tab-quiz" aria-controls="panel-quiz" aria-selected="false" tabindex="-1" data-tab="quiz" data-i18n="quiz.tab.quiz">Quiz</button>
+        <div class="tabs tabs--3" role="tablist" aria-label="Apprendre, scénarios ou quiz">
+          <button class="tab" type="button" role="tab" id="tab-aware" aria-controls="panel-aware" aria-selected="true" data-tab="aware"><i>1</i>Apprendre</button>
+          <button class="tab" type="button" role="tab" id="tab-scen" aria-controls="panel-scen" aria-selected="false" tabindex="-1" data-tab="scen"><i>2</i>Scénarios</button>
+          <button class="tab" type="button" role="tab" id="tab-quiz" aria-controls="panel-quiz" aria-selected="false" tabindex="-1" data-tab="quiz"><i>3</i>Quiz</button>
         </div>
         <div class="tab-panel" id="panel-aware" role="tabpanel" aria-labelledby="tab-aware">
-          <div class="aware-list" id="aware-list"></div>
+          <div class="learn" id="learn-stage"></div>
+        </div>
+        <div class="tab-panel" id="panel-scen" role="tabpanel" aria-labelledby="tab-scen" hidden>
+          <div class="stage2" id="scen-stage"></div>
         </div>
         <div class="tab-panel" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz" hidden>
-          <div class="stage" id="quiz-stage" aria-live="polite"></div>
+          <div class="stage2" id="quiz-stage" aria-live="polite"></div>
         </div>
       </div>
+    </div>
+
+    <div class="view view--aider" id="view-aider" data-view="aider" hidden>
+      <h2 class="sr-only">Comment je peux aider : le PAP et le ciel étoilé</h2>
+      <div class="sky" id="sky"></div>
     </div>
 
   </main>
@@ -178,7 +195,11 @@
 
   <noscript><p style="position:fixed;bottom:0;left:0;right:0;padding:12px;background:#fff;text-align:center">JavaScript est nécessaire pour l’expérience interactive.</p></noscript>
 
+  <script src="js/config/content-fix.js"></script>
   <script src="js/config/content.js"></script>
+  <script src="js/config/content-merge.js"></script>
+  <script src="js/config/learn.js"></script>
+  <script src="js/config/help.js"></script>
   <script src="js/locales/en.js"></script>
   <script src="js/locales/ar.js"></script>
   <script src="js/config/atlas-content.js"></script>
@@ -197,6 +218,7 @@
   <script src="js/views/city.js"></script>
   <script src="js/views/games.js"></script>
   <script src="js/views/quiz.js"></script>
+  <script src="js/views/help.js"></script>
   <script src="js/core/router.js"></script>
   <script src="js/core/app.js"></script>
 </body>

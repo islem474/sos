@@ -357,7 +357,7 @@
       const blockers = Array.from(document.querySelectorAll(
         SOS.app.router.current === 'home'
           ? '#view-home .scene.is-active .hero__text, #view-home .scene.is-active .hero__emblem, #view-home .scene.is-active .scene__phrase, #view-home .scene.is-active .atlas__map, #view-home .scene.is-active .atlas__list'
-          : '#view-jeux .page__head, #game-picker, #game-stage:not(:empty), #view-quiz .page__head, #view-quiz .tabs, #panel-aware:not([hidden]), #panel-quiz:not([hidden]), #talk:not([hidden]), #room .room__bar'
+          : '#view-jeux .page__head, #game-picker, #game-stage:not(:empty), #view-quiz .page__head, #view-quiz .tabs, #panel-aware:not([hidden]), #panel-scen:not([hidden]), #panel-quiz:not([hidden]), #view-aider .sky__title, #view-aider .sky__hud:not([hidden]), #view-aider .sky__extra, #view-aider .sky__ctrl, #talk:not([hidden]), #room .room__bar'
       )).map((el) => el.getBoundingClientRect()).filter((r) => r.width && r.height);
       const overlaps = (x, y) => blockers.some((r) =>
         x < r.right && x + w > r.left && y < r.bottom && y + h > r.top);
@@ -510,7 +510,7 @@
         if (!rv || !this.typing) return;
         const now = performance.now();
         const len = rv.text.length;
-        const cps = rv.voice ? (rv.lang === 'ar' ? 12 : 13.8) : 42;
+        const cps = rv.lang === 'ar' ? 12 : 1000 / 65;
         let target;
         if (rv.anchor) target = Math.min(rv.anchor.i + ((now - rv.anchor.t) / 1000) * cps, rv.anchor.end + 0.99);
         else target = Math.max(0, ((now - rv.t0) / 1000) * cps);

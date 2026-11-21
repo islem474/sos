@@ -11,7 +11,8 @@
       { id: 'atlas', label: 'Map', desc: 'Discover the SOS villages on the map of Tunisia.' },
       { id: 'ville', label: 'City', desc: 'Explore the SOS city and discover its places.' },
       { id: 'jeux', label: 'Games', desc: 'Mini-games to have fun.' },
-      { id: 'quiz', label: 'Quiz & awareness', desc: 'Learn important things, then test yourself.' }
+      { id: 'quiz', label: 'Quiz & awareness', desc: 'Learn important things, then test yourself.' },
+      { id: 'aider', label: 'How can I help?', desc: 'Discover how PAP can grow the light, star by star.' }
     ],
 
     lines: {
@@ -105,7 +106,8 @@
         items: [
           { id: 'ville', text: 'City: an illustration to explore. Touch the buildings, meet the mother, the director and the psychologist, and find the 5 hidden stars.' },
           { id: 'jeux', text: 'Games: two mini-games, Memory and Star Catcher, with a 20-second clock.' },
-          { id: 'quiz', text: 'Quiz & awareness: you first read important messages, then you test yourself.' }
+          { id: 'quiz', text: 'Quiz & awareness: you first read important messages, then you test yourself.' },
+          { id: 'aider', text: 'How can I help? Discover practical ways to act and grow solidarity.' }
         ],
         intro: { text: 'And now, the menu! It just appeared at the bottom. I’ll present each section, one after the other.' },
         outro: { text: 'There you go, you know everything! Pick a section whenever you like. I’ll stay in the corner: touch me and I’ll answer your questions.' }
@@ -174,6 +176,7 @@
       'title.ville': 'SOS — City',
       'title.jeux': 'SOS — Games',
       'title.quiz': 'SOS — Quiz & awareness',
+      'title.aider': 'SOS — How can I help?',
       'meta.desc': 'Discover SOS with S.O.Ssi, the little turtle who guides you: interactive city, games, quiz and awareness.',
       'city.sr': 'Interactive SOS city',
       'city.map': 'Map of the SOS city, drag to explore',
