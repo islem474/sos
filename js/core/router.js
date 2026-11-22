@@ -16,6 +16,7 @@
       const o = opts || {};
       const next = this.views[name];
       if (!next) return;
+      document.body.dataset.view = name;
 
       if (name !== this.current) {
         const prev = this.views[this.current];

@@ -197,7 +197,7 @@
       'talk.source': 'Source: ',
       'games.badge': 'Games',
       'games.title': 'Pick your game',
-      'games.sub': 'Two mini-games to have fun. Touch a card to start.',
+      'games.sub': 'Explore the games by choosing a star.',
       'games.memory': 'Memory',
       'games.memory.sub': 'Find the pairs',
       'games.tap': 'Star Catcher',

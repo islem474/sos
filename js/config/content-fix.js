@@ -245,7 +245,7 @@
       'talk.source': 'Source : ',
       'games.badge': 'Jeux',
       'games.title': 'Choisis ton jeu',
-      'games.sub': 'Deux mini-jeux pour s’amuser. Touche une carte pour démarrer.',
+      'games.sub': 'Explore les jeux en choisissant une étoile.',
       'games.memory': 'Memory',
       'games.memory.sub': 'Retrouve les paires',
       'games.tap': 'Attrape-étoiles',

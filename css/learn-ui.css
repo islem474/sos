@@ -108,4 +108,8 @@
   .story { min-height: 0; padding-top: 6px; } .story__orb { width: min(100%, 230px); } .story__body { gap: 12px; } .story__body h3 { font-size: clamp(2rem, 4.4vw, 3rem); }
   .story__text { font-size: 1.04rem; line-height: 1.6; } .thread { margin-top: 8px; }
 }
-@media (max-width: 760px) { body[data-view="quiz"] .mascot { display: none !important; } .story__orb { margin: 14px 0 6px 14px; } }
+@media (max-width: 760px) { .story__orb { margin: 14px 0 6px 14px; } }
+body[data-view="quiz"] .mascot,
+body[data-view="quiz"] .guide-toggle,
+body[data-view="quiz"] .talk,
+body[data-view="quiz"] .learn__say { display: none !important; }

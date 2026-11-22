@@ -69,7 +69,16 @@
   .view--jeux:not(.is-playing) .page__head h2 { font-size: 2rem; } .view--jeux:not(.is-playing) .page__head h2::after { display: none; }
   .view--jeux:not(.is-playing) .page__head p { margin: 0; flex-basis: 100%; }
   .view--jeux .page { padding-top: calc(var(--top-h) - 6px); }
-  .gsky { margin-top: 8px; align-items: start; } .gdock { padding: 20px 22px 22px; } .gdock h3 { font-size: 1.5rem; }
+  .g-picker { gap: 16px; }
+  .g-top { padding: 10px 14px; }
+  .g-top .g-seg button { padding: 6px 12px; }
+  .gsky { margin-top: 0; align-items: start; }
+  .gdock { gap: 6px; padding: 14px 18px 16px; }
+  .gdock__ico { width: 52px; height: 52px; font-size: 1.7rem; }
+  .gdock h3 { font-size: 1.4rem; }
+  .gdock p { font-size: .9rem; line-height: 1.4; }
+  .gdock__lv { font-size: .88rem; }
+  .g-play { min-height: 46px; }
   .gpath { margin-top: 24px; }
 }
 @media (max-width: 760px) {

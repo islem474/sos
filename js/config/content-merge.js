@@ -7,7 +7,7 @@
   SOS.content = Object.assign({}, fix, aya);
   SOS.content.hero = Object.assign({}, fix.hero, aya.hero);
   SOS.content.mascot = fix.mascot;
-  SOS.content.nav = fix.nav.concat([
+  SOS.content.nav = fix.nav.filter((item) => item.id !== 'atlas').concat([
     { id: 'aider', label: 'Comment je peux aider', icon: 'aider', desc: 'Découvre comment le PAP fait grandir la lumière, étoile après étoile.' }
   ]);
   SOS.content.sides = Object.assign({}, fix.sides, aya.sides, {

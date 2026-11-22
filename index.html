@@ -134,14 +134,14 @@
     </div>
 
 
-    <div class="view" id="view-jeux" data-view="jeux" hidden>
-      <div class="page">
+    <div class="view view--jeux" id="view-jeux" data-view="jeux" hidden>
+      <div class="page page--games">
         <header class="page__head">
           <span class="view-badge" id="jeux-badge"></span>
           <h2 data-i18n="games.title">Choisis ton jeu</h2>
-          <p data-i18n="games.sub">Deux mini-jeux pour s’amuser. Touche une carte pour démarrer.</p>
+          <p data-i18n="games.sub">Explore les jeux en choisissant une étoile.</p>
         </header>
-        <div class="picker" id="game-picker">
+        <div class="g-picker" id="game-picker">
           <button class="pick" type="button" data-game="memory" aria-pressed="false">
             <span class="pick__ico" aria-hidden="true">M</span>
             <span><strong data-i18n="games.memory">Memory</strong><span data-i18n="games.memory.sub">Retrouve les paires</span></span>
@@ -151,7 +151,7 @@
             <span><strong data-i18n="games.tap">Attrape-étoiles</strong><span data-i18n="games.tap.sub">20 secondes chrono</span></span>
           </button>
         </div>
-        <div class="stage" id="game-stage" aria-live="polite"></div>
+        <div class="g-stage" id="game-stage" aria-live="polite"></div>
       </div>
     </div>
 

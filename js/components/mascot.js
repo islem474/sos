@@ -38,7 +38,6 @@
       this.guard = 0;
       this.rv = null;
       this.bubbleLayoutKey = '';
-      this.bubblePinned = null;
       this.typing = false;
       this.speakingNow = false;
       this.fullText = '';
@@ -296,25 +295,20 @@
       const rect = this.bubble.getBoundingClientRect();
       const w = rect.width;
       const h = rect.height;
-      if (!this.bubblePinned) {
-        const x = clamp(rect.left, 12, Math.max(12, vw - 12 - w));
-        const y = clamp(rect.top, safeTop, Math.max(safeTop, safeBottom - h));
-        if (Math.abs(x - rect.left) < 0.5 && Math.abs(y - rect.top) < 0.5) return;
-        this.bubblePinned = { x: x, y: y };
-        this.bubble.classList.add('is-fixed');
-        this.bubble.classList.remove('is-below');
-        this.bubble.style.setProperty('--bx', '0px');
-        this.bubble.style.bottom = 'auto';
-        this.bubble.style.transform = 'none';
-        this.bubble.style.setProperty('--bubble-arrow-x', '0px');
-      }
-
-      const x = clamp(this.bubblePinned.x, 12, Math.max(12, vw - 12 - w));
-      const y = clamp(this.bubblePinned.y, safeTop, Math.max(safeTop, safeBottom - h));
-      this.bubblePinned = { x: x, y: y };
+      const x = clamp(rect.left, 12, Math.max(12, vw - 12 - w));
+      const y = clamp(rect.top, safeTop, Math.max(safeTop, safeBottom - h));
+      if (Math.abs(x - rect.left) < 0.5 && Math.abs(y - rect.top) < 0.5) return;
       const root = this.root.getBoundingClientRect();
-      this.bubble.style.left = (x - root.left) + 'px';
-      this.bubble.style.top = (y - root.top) + 'px';
+      const left = parseFloat(this.bubble.style.left);
+      const top = parseFloat(this.bubble.style.top);
+      this.bubble.classList.remove('is-fixed');
+      this.bubble.classList.toggle('is-below', y >= root.bottom);
+      this.bubble.style.setProperty('--bx', '0px');
+      this.bubble.style.bottom = 'auto';
+      this.bubble.style.transform = 'none';
+      this.bubble.style.left = (Number.isFinite(left) ? left : rect.left - root.left) + x - rect.left + 'px';
+      this.bubble.style.top = (Number.isFinite(top) ? top : rect.top - root.top) + y - rect.top + 'px';
+      this.bubble.style.setProperty('--bubble-arrow-x', clamp(root.left + root.width / 2 - x - 7, 12, w - 26) + 'px');
     }
 
     layoutBubble() {
@@ -338,7 +332,6 @@
         return;
       }
       this.bubbleLayoutKey = layoutKey;
-      this.bubblePinned = null;
       const maxHeight = Math.max(72, Math.min(vh * 0.48, safeHeight));
       this.bubble.style.maxHeight = maxHeight + 'px';
       this.bubble.style.height = '';
@@ -379,10 +372,9 @@
       }
 
       this.bubble.classList.toggle('is-below', placement && placement.side === 'below');
-      this.bubble.classList.toggle('is-fixed', !placement);
+      this.bubble.classList.remove('is-fixed');
       this.bubble.style.setProperty('--bx', '0px');
       if (placement) {
-        this.bubblePinned = null;
         this.bubble.style.left = '';
         this.bubble.style.transform = '';
         this.bubble.style.top = placement.side === 'above' ? 'auto' : 'calc(100% + 12px)';
@@ -421,13 +413,15 @@
           fallback.top, fallback.bottom - fallbackBubbleHeight);
         this.bubble.style.left = (fallback.x - root.left) + 'px';
         this.bubble.style.top = (y - root.top) + 'px';
-        this.bubblePinned = { x: fallback.x, y: y };
+        this.bubble.classList.toggle('is-below', y >= root.bottom);
+        this.bubble.style.setProperty('--bubble-arrow-x', clamp(center - fallback.x - 7, 12, w - 26) + 'px');
       } else {
         const y = clamp(root.top + root.height / 2 - h / 2, safeTop, Math.max(safeTop, safeBottom - h));
         const x = uniqueXs.find((candidate) => !overlaps(candidate, y));
         this.bubble.style.left = ((x === undefined ? preferredLeft : x) - root.left) + 'px';
         this.bubble.style.top = (y - root.top) + 'px';
-        this.bubblePinned = { x: x === undefined ? preferredLeft : x, y: y };
+        this.bubble.classList.toggle('is-below', y >= root.bottom);
+        this.bubble.style.setProperty('--bubble-arrow-x', clamp(center - (x === undefined ? preferredLeft : x) - 7, 12, w - 26) + 'px');
       }
       this.bubble.style.bottom = 'auto';
       this.bubble.style.transform = 'none';
@@ -463,7 +457,6 @@
       void this.bubble.offsetWidth;
       this.bubble.style.animation = '';
       this.bubbleLayoutKey = '';
-      this.bubblePinned = null;
       this.layoutBubble();
       this.ensure();
       this.autoMode = o.advance ? 'advance' : 'hide';
